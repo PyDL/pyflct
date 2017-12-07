@@ -1,15 +1,15 @@
 # pyflct
-
+07 December 2017 - Jiajia Liu, SP2RC, University of Sheffield
 ## Discription: 
-         Python wrapper for FLCT code written in C from Fisher & Welsch
-         2008. You can download the original C code from the following:
-         [CGEM](http://cgem.ssl.berkeley.edu/cgi-bin/cgem/FLCT/home)
+ Python wrapper for FLCT code written in C from Fisher & Welsch
+ 2008. You can download the original C code from the following link:
+ http://cgem.ssl.berkeley.edu/cgi-bin/cgem/FLCT/home
 
-         Before a proper run of this program, you need first install
-         the FLCT libraries. Extract the downloaded C source files, go
-         to the fold. Then check source/README-install.txt
-         and Makefile to find out how to install the FLCT libraries
-         properly.
+ Before a proper run of this program, you need first install
+ the FLCT libraries. Extract the downloaded C source files, go
+ to the fold. Then check source/README-install.txt
+ and Makefile to find out how to install the FLCT libraries
+ properly.
 
 ## Inputs:
          data1 - image data at time T
