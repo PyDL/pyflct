@@ -52,6 +52,7 @@ Inputs:
     pc - If set, then the input images are assumed to be in Plate Carree
          coordinates (uniformly spaced in longitude and latitude). This
          is useful when e.g. input images are SHARP magnetic field data.
+    bc - If set, bias correction will be turned on (new feature in 1.0.6)
     latmin, latmax - minimum and maximum latitude. Only valid if pc is
                      set. In units of radian.
     quiet - If set, no non-error output will be shown.
@@ -183,7 +184,7 @@ def vcimagein(filename='testout.dat'):
 
 def flct(data1, data2, deltat=1, deltas=1, sigma=10, infile="testin.dat",
          outfile="testout.dat", thresh=None, kr=None, skip=None, xoff=0,
-         yoff=0, interp=False, pc=False, latmin=0, latmax=0.2,
+         yoff=0, interp=False, pc=False, bc=False, latmin=0, latmax=0.2,
          quiet=False):
     '''
     Main function of the Python wrapper pyflct for the FLCT C code
@@ -224,6 +225,7 @@ def flct(data1, data2, deltat=1, deltas=1, sigma=10, infile="testin.dat",
         pc - If set, then the input images are assumed to be in Plate Carree
              coordinates (uniformly spaced in longitude and latitude). This
              is useful when e.g. input images are SHARP magnetic field data.
+        bc - If set, bias correction will be turned on (new feature in 1.0.6)
         latmin, latmax - minimum and maximum latitude. Only valid if pc is
                          set. In units of radian.
         quiet - If set, no non-error output will be shown.
@@ -277,6 +279,8 @@ def flct(data1, data2, deltat=1, deltas=1, sigma=10, infile="testin.dat",
         latmin = "{:.6f}".format(float(latmin))
         latmax = "{:.6f}".format(float(latmax))
         command = command + " -pc " + latmin + " " + latmax
+    if bc:
+        command = command + " -bc"
     if quiet:
         command = command + " -q"
     os.system(command)
