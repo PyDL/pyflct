@@ -48,6 +48,7 @@
          pc - If set, then the input images are assumed to be in Plate Carree
               coordinates (uniformly spaced in longitude and latitude). This
               is useful when e.g. input images are SHARP magnetic field data.
+         bc - If set, bias correction will be turned on (new feature in 1.0.6)
          latmin, latmax - minimum and maximum latitude. Only valid if pc is
                           set. In units of radian.
          quiet - If set, no non-error output will be shown.
