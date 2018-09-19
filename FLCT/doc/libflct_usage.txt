@@ -3,7 +3,7 @@ USER'S GUIDE TO THE FLCT LIBRARY
 Starting with version 1.03 of flct and warp, the mathematical/computational 
 tasks have been placed in a series of functions that are separate from the main
 programs, which are now mainly assigned to do the I/O operations, and then
-call the flct, shift_frac2d, or warp_frac2d functions.  These functions
+call the flct, flct_pc, shift_frac2d, or warp_frac2d functions.  These functions
 can also be called independently from other Fortran or C programs by linking to
 the flct library.  In this document, we
 describe how to call these functions from either C or Fortran.  The flct
@@ -11,13 +11,16 @@ library of functions is written entirely in C, but contains function
 wrappers which allow for subroutine calls from a Fortran program.
 
 The flct function computes a 2-d velocity field from two images
-that are separated slightly in time.  The shift_frac2d function performs a 
+that are separated slightly in time.  The flct_pc function does the same
+task as the flct function, but assumes the two images are given on a Plate
+Carree grid (uniformly spaced in longitude and latitude).  
+The shift_frac2d function performs a 
 uniform shift on an image, and the warp_frac2d function will perform a 
 non-uniform shift (i.e. a "warp") of an image.
 
-From either C or Fortran, the flct, shift_frac2d, or warp_frac2d functions
-will require that the calling program also link to the fftw3 library as well
-as the flct library.
+From either C or Fortran, the flct, flct_pc, shift_frac2d, or warp_frac2d 
+functions will require that the calling program also link to the fftw3 
+library as well as the flct library.
 
 When using gcc to link to flct and fftw3, typical linking options would be 
 -lflct -lfftw3 -lm.  Make sure that flctsubs.h is installed in a location
@@ -26,6 +29,11 @@ that the compiler will find.
 When linking with gfortran, typical linking options would
 be -lflct -lfftw3.  
 
+Note that when building the flct library, the default is to assume that complex
+variables in C are not defined.  See the README-install.txt file in the source
+folder for instructions on how to compile in support for complex variables in C
+if you need it.
+
 --------------------------------------
 C INTERFACE:
 --------------------------------------
@@ -33,14 +41,14 @@ C INTERFACE:
 i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat, 
     double deltas, double sigma, double * vx, double * vy, double * vm,
     double thresh, i4 absflag, i4 filter, double kr, i4 skip,
-    i4 poffset, i4 qoffset, i4 interpolate, i4 verbose)
+    i4 poffset, i4 qoffset, i4 interpolate, i4 biascor, i4 verbose)
 
 PURPOSE:  To use local-correlation tracking to find a 2D velocity field from
           two images separated slightly in time.
 
 USAGE: iflct=flct(transp, f1, f2, nx, ny, deltat, deltas, sigma, 
        vx, vy, vm, thresh, absflag, filter, kr, skip, poffset, qoffset, 
-       interpolate, verbose);
+       interpolate, biascor, verbose);
 
 transp:        (input) 4-byte integer indicating whether input images are stored
                in column-major (1st index varies fastest) or row-major
@@ -116,7 +124,7 @@ skip:          (input) 4-byte integer value specifying how many pixels to
                is done.  Setting skip to 2 means to skip every other pixel 
                in both the x and y directions.  This option is useful when 
                working with very large images, and also where interpolation 
-               is done (see discussion of "interpolate" below).
+               is done (see discussion of "interpolate" below).  
 
 poffset:       (input) 4-byte integer value specifying initial offset in 
                pixels in the x-direction if skipping is invoked.
@@ -133,6 +141,13 @@ interpolate:   (input) 4-byte integer value of interpolate flag.  If skip is
                mask array vm is set to 0.5 at the locations where the velocity 
                components are interpolated.
 
+biascor:       (input) 4-byte integer value of the "bias-correction" flag.
+               if(biascor != 0) then the flct velocities are "bias corrected"
+               by attempting to correct for the fact that the gaussian window
+               function is the same for both the initial and final images,
+               resulting in a velocity under-estimate using the standard
+               FLCT algorithm.  
+
 verbose:       (input) 4-byte integer value of the verbosity flag.  
                If (verbose ==0) then flct messages to stdout are suppressed.
 
@@ -142,7 +157,7 @@ i4 flct_pc (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
     double deltas, double sigma, double * vx, double * vy, double * vm,
     double thresh, i4 absflag, i4 filter, double kr, i4 skip,
     i4 poffset, i4 qoffset, i4 interpolate, double latmin, double latmax,
-    i4 verbose)
+    i4 biascor, i4 verbose)
 
 PURPOSE:  To use local-correlation tracking to find a 2D velocity field from
           two images separated slightly in time.  The images are assumed to
@@ -154,7 +169,7 @@ PURPOSE:  To use local-correlation tracking to find a 2D velocity field from
 
 USAGE: iflct=flct_pc(transp, f1, f2, nx, ny, deltat, deltas, sigma, 
        vx, vy, vm, thresh, absflag, filter, kr, skip, poffset, qoffset, 
-       interpolate, latmin, latmax, verbose);
+       interpolate, latmin, latmax, biascor, verbose);
 
 transp:        (input) 4-byte integer indicating whether input images are stored
                in column-major (1st index varies fastest) or row-major
@@ -232,7 +247,9 @@ skip:          (input) 4-byte integer value specifying how many pixels to
                is done.  Setting skip to 2 means to skip every other pixel 
                in both the x and y directions.  This option is useful when 
                working with very large images, and also where interpolation 
-               is done (see discussion of "interpolate" below).
+               is done (see discussion of "interpolate" below).  For flct_pc,
+               interpolate must be non-zero if skip is selected, or the
+               function will exit.
 
 poffset:       (input) 4-byte integer value specifying initial offset in 
                pixels in the x-direction if skipping is invoked.
@@ -254,6 +271,13 @@ latmin:        (input) double precision value of the minimum latitude of the
 
 latmax:        (input) double precision value of the maximum latitude of the
                images, in radians.
+
+biascor:       (input) 4-byte integer value of the "bias-correction" flag.
+               if(biascor != 0) then the flct velocities are "bias corrected"
+               by attempting to correct for the fact that the gaussian window
+               function is the same for both the initial and final images,
+               resulting in a velocity under-estimate using the standard
+               FLCT algorithm.
 
 verbose:       (input) 4-byte integer value of the verbosity flag.  
                If (verbose ==0) then flct messages to stdout are suppressed.
@@ -343,14 +367,14 @@ void flct_f77_(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx,
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter,
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     i4 * verbose)
+     i4 * biascor, i4 * verbose)
 
 PURPOSE:  To use local-correlation tracking to find a 2D velocity field from
           two images separated slightly in time.  Call from Fortran.
 
 USAGE:    call flct_f77(transp,f1,f2,nx,ny,deltat,deltas,sigma,
                vx,vy,vm,thresh,absflag,filter,kr,skip,poffset,qoffset,
-               interpolate,verbose)
+               interpolate,biascor,verbose)
 
 
 transp:        (input)  integer*4 variable indicating whether input images 
@@ -429,7 +453,7 @@ skip:          (input) integer*4 variable specifying how many pixels to
                skipping is done.  Setting skip to 2 means to skip every other 
                pixel in both the x and y directions.  This option is useful 
                when working with very large images, and also where interpolation
-               is done (see discussion of "interpolate" below).
+               is done (see discussion of "interpolate" below).  
 
 poffset:       (input) integer*4 variable specifying initial offset in 
                pixels in the x-direction if skipping is invoked.
@@ -446,6 +470,13 @@ interpolate:   (input) integer*4 variable, the interpolate flag.  If skip is
                mask array vm is set to 0.5 at the locations where the velocity 
                components are interpolated.
 
+biascor:       (input) integer*4 variable, the "bias-correction" flag.
+               if(biascor .ne. 0) then the flct velocities are "bias corrected"
+               by attempting to correct for the fact that the gaussian window
+               function is the same for both the initial and final images,
+               resulting in a velocity under-estimate using the standard
+               FLCT algorithm.
+
 verbose:       (input) integer*4 variable, the verbosity flag.  
                If (verbose .eq. 0) then flct messages to stdout are suppressed.
 
@@ -455,7 +486,7 @@ void flct_pc_f77_(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx,
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter,
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     double * latmin, double * latmax, i4 * verbose)
+     double * latmin, double * latmax, i4 * biascor, i4 * verbose)
 
 PURPOSE:  To use local-correlation tracking to find a 2D velocity field from
           two images separated slightly in time.  The images are assumed to
@@ -468,7 +499,7 @@ PURPOSE:  To use local-correlation tracking to find a 2D velocity field from
 
 USAGE:    call flct_pc_f77(transp,f1,f2,nx,ny,deltat,deltas,sigma,
                vx,vy,vm,thresh,absflag,filter,kr,skip,poffset,qoffset,
-               interpolate,latmin,latmax,verbose)
+               interpolate,latmin,latmax,biascor,verbose)
 
 
 transp:        (input)  integer*4 variable indicating whether input images 
@@ -548,7 +579,9 @@ skip:          (input) integer*4 variable specifying how many pixels to
                skipping is done.  Setting skip to 2 means to skip every other 
                pixel in both the x and y directions.  This option is useful 
                when working with very large images, and also where interpolation
-               is done (see discussion of "interpolate" below).
+               is done (see discussion of "interpolate" below).  If flct_pc_f77
+               is called with a non-zero value of skip, you must also set
+               interpolate to a non-zero value.
 
 poffset:       (input) integer*4 variable specifying initial offset in 
                pixels in the x-direction if skipping is invoked.
@@ -570,6 +603,13 @@ latmin:        (input) real*8 value of the minimum latitude of the images,
 
 latmax:        (input) real*8 value of the maximum latitude of the images, 
                in radians.
+
+biascor:       (input) integer*4 variable, the "bias-correction" flag.
+               if(biascor .ne. 0) then the flct velocities are "bias corrected"
+               by attempting to correct for the fact that the gaussian window
+               function is the same for both the initial and final images,
+               resulting in a velocity under-estimate using the standard
+               FLCT algorithm.
 
 verbose:       (input) integer*4 variable, the verbosity flag.  
                If (verbose .eq. 0) then flct messages to stdout are suppressed.

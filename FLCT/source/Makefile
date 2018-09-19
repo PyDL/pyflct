@@ -18,12 +18,13 @@ CC = gcc
 # macosx:
 FLCT_MANDIR = /usr/share/man/man1
 FLCT_BINDIR = /usr/local/bin
-LIBFFTW3 = /opt/local/lib
+LIBFFTW3 = /usr/lib/x86_64-linux-gnu/
 FLCT_LIBDIR = /usr/local/lib
 FLCT_INCLUDEDIR = /usr/local/include
 LOPTS = -lflct -lfftw3 -lm
 INCLUDEFFTW3 = /opt/local/include
 # next version of options for a reasonably optimized executable
+#COPTS = -O3 -Wall -fomit-frame-pointer -fPIC
 COPTS = -O3 -Wall -fomit-frame-pointer -fPIC
 # next version of options for debugging with gdb or valgrind
 #COPTS = -g
@@ -35,9 +36,6 @@ flct:	flctmain.c libflct.a
 warp:	warpmain.c libflct.a
 	$(CC) $(COPTS) warpmain.c -I$(INCLUDEFFTW3) -I. -L$(LIBFFTW3) -L. $(LOPTS) -o warp
 all:	libflct.a flct warp
-	make libflct.a
-	make flct
-	make warp
 flctinstall: flct
 	cp ./flct $(FLCT_BINDIR)
 	cp ../doc/flct.1 $(FLCT_MANDIR)

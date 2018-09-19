@@ -1,7 +1,7 @@
 /*
 
  warp: http://solarmuri.ssl.berkeley.edu/overview/publicdownloads/software.html
- Copyright (C) 2009-2017 Regents of the University of California
+ Copyright (C) 2009-2018 Regents of the University of California
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ int main (int argc, char *argv[])
 
 /* BEGIN MAIN PROGRAM */
 
-  char *version ="1.04   ";
+  char *version ="1.06   ";
   char ifile[100], sfile[100], ofile[100];
   i4 quiet, verbose;
   i4 nx, nxdel, ny, nydel;
@@ -52,7 +52,7 @@ int main (int argc, char *argv[])
 
   if ((argc < 4) || (argc > 6))
     {
-      printf("warp: Version %s Copyright: 2009-2017 University of California\n",
+      printf("warp: Version %s Copyright: 2009-2018 University of California\n",
           version);
       printf("Authors: G.H. Fisher, B.T. Welsch, UCB Space Sciences Lab\n\n");
       printf
@@ -94,7 +94,7 @@ int main (int argc, char *argv[])
   ibe = is_large_endian ();
   if (verbose)
     {
-      printf("warp: Version %s Copyright: 2009-2017 University of California\n",
+      printf("warp: Version %s Copyright: 2009-2018 University of California\n",
           version);
       printf("Authors: G.H. Fisher, B.T. Welsch, UCB Space Sciences Lab\n\n");
       if (ibe)

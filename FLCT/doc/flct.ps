@@ -3,7 +3,7 @@
 %%Title: Enscript Output
 %%For: George H Fisher
 %%Creator: GNU Enscript 1.6.6
-%%CreationDate: Tue Nov 28 15:09:19 2017
+%%CreationDate: Mon Feb 12 05:37:26 2018
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: Letter 612 792 0 () ()
@@ -456,7 +456,7 @@ _S
 /fdir (.) def
 /ftail (.) def
 % User defined strings:
-/fmodstr (Tue Nov 28 15:09:19 2017) def
+/fmodstr (Mon Feb 12 05:37:26 2018) def
 /pagenumstr (1) def
 /user_header_p true def
 /user_header_left_str () def
@@ -466,7 +466,7 @@ _S
 %%EndPageSetup
 do_header
 5 716 M
-(FLCT\(1.04\)                       User Manuals                       FLCT\(1.04\)) s
+(FLCT\(1.06\)                       User Manuals                       FLCT\(1.06\)) s
 5 672 M
 (N) s
 5 672 M
@@ -664,14 +664,20 @@ do_header
 251 617 M
 (-_) s
 257 617 M
-(q ]) s
-269 617 M
-(] .) s
+(b_) s
+263 617 M
+(c _) s
+275 617 M
+(-_) s
 281 617 M
-(..) s
-287 617 M
-(..) s
+(q ]) s
 293 617 M
+(] .) s
+305 617 M
+(..) s
+311 617 M
+(..) s
+317 617 M
 (.) s
 5 595 M
 (D) s
@@ -1162,7 +1168,7 @@ _S
 /fdir (.) def
 /ftail (.) def
 % User defined strings:
-/fmodstr (Tue Nov 28 15:09:19 2017) def
+/fmodstr (Mon Feb 12 05:37:26 2018) def
 /pagenumstr (2) def
 /user_header_p true def
 /user_header_left_str () def
@@ -1331,36 +1337,34 @@ do_header
 (a / 2 pixels and then interpolating) s
 5 232 M
 (              compares  poorly with calculations performed at every gridpoint.) s
+5 210 M
+(              If using the skip option while also  using  the  "Plate  Carree") s
 5 199 M
-(       -h     If this "high resolution" flag is set, cubic convolution  inter-) s
+(              option  \(see  below\),  you  must also use the interpolation sub-) s
 5 188 M
-(              polation  is  performed  to  0.1  pixel  precision before Taylor) s
-5 177 M
-(              expansion is done to find the location of the peak.) s
+(              option described above.) s
 5 155 M
-(              We have DISABLED this option because it is slower and less accu-) s
+(       -h     If this "high resolution" flag is set, cubic convolution  inter-) s
 5 144 M
-(              rate than the default method.) s
+(              polation  is  performed  to  0.1  pixel  precision before Taylor) s
+5 133 M
+(              expansion is done to find the location of the peak.) s
 5 111 M
-(       -pc latmin latmax) s
+(              We have DISABLED this option because it is slower and less accu-) s
 5 100 M
-(              If  this "Plate Carree" option is set, then the input images are) s
-5 89 M
-(              assumed to be in Plate Carree coordinates \(uniformly  spaced  in) s
-5 78 M
-(              longitude  and latitude\).  In this case, the images are interpo-) s
+(              rate than the default method.) s
 5 67 M
-(              lated to a Mercator  Projection,  then  FLCT  is  run,  and  the) s
+(       -pc latmin latmax) s
 5 56 M
-(              resulting velocities are interpolated back to Plate Carree coor-) s
+(              If  this "Plate Carree" option is set, then the input images are) s
 5 45 M
-(              dinates, with cos\(latitude\) modulation.  The limits  latmin  and) s
+(              assumed to be in Plate Carree coordinates \(uniformly  spaced  in) s
 5 34 M
-(              latmax  are  assumed  to be given in radians, unless they end in) s
+(              longitude  and latitude\).  In this case, the images are interpo-) s
 5 23 M
-(              'd', in which case they are assumed to be in degrees,  and  will) s
+(              lated to a Mercator  Projection,  then  FLCT  is  run,  and  the) s
 5 12 M
-(              then be converted to radians.) s
+(              resulting velocities are interpolated back to Plate Carree coor-) s
 _R
 S
 %%Page: (3) 3
@@ -1372,7 +1376,7 @@ _S
 /fdir (.) def
 /ftail (.) def
 % User defined strings:
-/fmodstr (Tue Nov 28 15:09:19 2017) def
+/fmodstr (Mon Feb 12 05:37:26 2018) def
 /pagenumstr (3) def
 /user_header_p true def
 /user_header_left_str () def
@@ -1381,1010 +1385,712 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 do_header
+5 716 M
+(              dinates, with cos\(latitude\) modulation.  The limits  latmin  and) s
+5 705 M
+(              latmax  are  assumed  to be given in radians, unless they end in) s
 5 694 M
-(       -q     If this flag is set, no non-error output is sent to s) s
-401 694 M
-(st) s
-407 694 M
-(td) s
-413 694 M
-(do) s
-419 694 M
-(ou) s
-425 694 M
-(ut) s
-431 694 M
-(t.) s
-437 694 M
-(.) s
+(              'd', in which case they are assumed to be in degrees,  and  will) s
+5 683 M
+(              then  be converted to radians.  Because of possible artifacts in) s
+5 672 M
+(              low-signal regions of the image due to the  interpolation  algo-) s
 5 661 M
-(E) s
-5 661 M
-(EX) s
-11 661 M
-(XA) s
-17 661 M
-(AM) s
-23 661 M
-(MP) s
-29 661 M
-(PL) s
-35 661 M
-(LE) s
-41 661 M
-(ES) s
-47 661 M
-(S) s
+(              rithm,  we strongly recommend using the thresholding option \("-t) s
 5 650 M
-(       e) s
-47 650 M
-(ex) s
-53 650 M
-(xa) s
-59 650 M
-(am) s
-65 650 M
-(mp) s
-71 650 M
-(pl) s
-77 650 M
-(le) s
-83 650 M
-(e u) s
-95 650 M
-(us) s
-101 650 M
-(si) s
-107 650 M
-(in) s
-113 650 M
-(ng) s
-119 650 M
-(g a) s
-131 650 M
-(a s) s
-143 650 M
-(sh) s
-149 650 M
-(hi) s
-155 650 M
-(if) s
-161 650 M
-(ft) s
-167 650 M
-(te) s
-173 650 M
-(ed) s
-179 650 M
-(d i) s
-191 650 M
-(im) s
-197 650 M
-(ma) s
-203 650 M
-(ag) s
-209 650 M
-(ge) s
-215 650 M
-(e i) s
-227 650 M
-(in) s
-233 650 M
-(n a) s
-245 650 M
-(an) s
-251 650 M
-(n I) s
-263 650 M
-(ID) s
-269 650 M
-(DL) s
-275 650 M
-(L s) s
-287 650 M
-(se) s
-293 650 M
-(es) s
-299 650 M
-(ss) s
-305 650 M
-(si) s
-311 650 M
-(io) s
-317 650 M
-(on) s
-323 650 M
-(n,) s
-329 650 M
-(, w) s
-341 650 M
-(wi) s
-347 650 M
-(it) s
-353 650 M
-(th) s
-359 650 M
-(h s) s
-371 650 M
-(si) s
-377 650 M
-(ig) s
-383 650 M
-(gm) s
-389 650 M
-(ma) s
-395 650 M
-(a=) s
-401 650 M
-(=1) s
-407 650 M
-(15) s
-413 650 M
-(5:) s
-419 650 M
-(:) s
+(              thresh"\) when using the Plate Carree option.) s
 5 628 M
-(              IDL>f1=randomu\(seed,101,101\)) s
+(              If sigma is set to 0 when the Plate Carree option is  set,  then) s
+5 617 M
+(              single  values  of the x and y shifts are returned, and a single) s
 5 606 M
-(              IDL>f2=shift_frac2d\(f1,1.,-1.\)) s
+(              value of 0.5 is returned as the mask value.  The x and y  shifts) s
+5 595 M
+(              are  modulated by the cosine of the average latitude, coinciding) s
 5 584 M
-(              IDL>vcimage2out,f1,f2,'testin.dat') s
-5 562 M
-(              IDL>$flct testin.dat testout.dat 1. 1. 15.) s
+(              with the centroid of the image in pixel space.) s
+5 551 M
+(       -bc    If this flag is set, an attempt is made to correct the bias that) s
 5 540 M
-(              IDL>vcimage3in,vx,vy,vm,'testout.dat') s
+(              under-estimates  velocity amplitudes.  This bias is intrinsic to) s
+5 529 M
+(              the FLCT algorithm. The bias correction algorithm that is imple-) s
 5 518 M
-(              IDL>shade_surf,vx) s
+(              mented  uses  the  Hessian determinant, and the assumed value of) s
+5 507 M
+(              sigma, to adjust the x-and-y velocities.  More detail  is  given) s
 5 496 M
-(              IDL>shade_surf,vy) s
-5 474 M
-(       S) s
-47 474 M
-(Sa) s
-53 474 M
-(am) s
-59 474 M
-(me) s
-65 474 M
-(e  a) s
-83 474 M
+(              in  the  file  b) s
+179 496 M
+(bi) s
+185 496 M
+(ia) s
+191 496 M
 (as) s
-89 474 M
-(s a) s
-101 474 M
-(ab) s
-107 474 M
-(bo) s
-113 474 M
-(ov) s
-119 474 M
-(ve) s
-125 474 M
-(e,) s
-131 474 M
-(, b) s
-143 474 M
-(bu) s
-149 474 M
-(ut) s
-155 474 M
-(t o) s
-167 474 M
-(on) s
-173 474 M
-(nl) s
-179 474 M
-(ly) s
-185 474 M
-(y c) s
-197 474 M
+197 496 M
+(s_) s
+203 496 M
+(_c) s
+209 496 M
 (co) s
-203 474 M
-(om) s
-209 474 M
-(mp) s
-215 474 M
-(pu) s
-221 474 M
-(ut) s
-227 474 M
+215 496 M
+(or) s
+221 496 M
+(rr) s
+227 496 M
+(re) s
+233 496 M
+(ec) s
+239 496 M
+(ct) s
+245 496 M
 (ti) s
-233 474 M
+251 496 M
+(io) s
+257 496 M
+(on) s
+263 496 M
+(n_) s
+269 496 M
+(_i) s
+275 496 M
 (in) s
-239 474 M
-(ng) s
-245 474 M
-(g e) s
-257 474 M
-(ev) s
-263 474 M
-(ve) s
-269 474 M
-(er) s
-275 474 M
-(ry) s
-281 474 M
-(y 5) s
-293 474 M
-(5 p) s
-305 474 M
-(pi) s
-311 474 M
-(ix) s
-317 474 M
-(xe) s
-323 474 M
-(el) s
-329 474 M
-(ls) s
-335 474 M
-(s,) s
-341 474 M
-(, a) s
-353 474 M
-(an) s
-359 474 M
-(nd) s
-365 474 M
-(d t) s
-377 474 M
-(th) s
-383 474 M
-(he) s
-389 474 M
-(en) s
-395 474 M
-(n i) s
-407 474 M
-(in) s
-413 474 M
-(nt) s
-419 474 M
-(te) s
-425 474 M
-(er) s
-431 474 M
-(rp) s
-437 474 M
-(po) s
-443 474 M
-(ol) s
-449 474 M
-(la) s
-455 474 M
-(at) s
-461 474 M
-(t-) s
-467 474 M
-(-) s
-5 463 M
-(       i) s
-47 463 M
-(in) s
-53 463 M
-(ng) s
-59 463 M
-(g:) s
-65 463 M
-(:) s
-5 441 M
-(              IDL>$flct testin.dat testout.dat 1. 1. 15. -s 5i) s
+281 496 M
+(n_) s
+287 496 M
+(_f) s
+293 496 M
+(fl) s
+299 496 M
+(lc) s
+305 496 M
+(ct) s
+311 496 M
+(t.) s
+317 496 M
+(.t) s
+323 496 M
+(tx) s
+329 496 M
+(xt) s
+335 496 M
+(t in the FLCT distribu-) s
+5 485 M
+(              tion.) s
+5 452 M
+(       -q     If this flag is set, no non-error output is sent to s) s
+401 452 M
+(st) s
+407 452 M
+(td) s
+413 452 M
+(do) s
+419 452 M
+(ou) s
+425 452 M
+(ut) s
+431 452 M
+(t.) s
+437 452 M
+(.) s
 5 419 M
-(       S) s
+(E) s
+5 419 M
+(EX) s
+11 419 M
+(XA) s
+17 419 M
+(AM) s
+23 419 M
+(MP) s
+29 419 M
+(PL) s
+35 419 M
+(LE) s
+41 419 M
+(ES) s
 47 419 M
-(Sa) s
-53 419 M
-(am) s
-59 419 M
-(me) s
-65 419 M
-(e a) s
-77 419 M
-(as) s
-83 419 M
-(s a) s
-95 419 M
-(ab) s
-101 419 M
-(bo) s
-107 419 M
-(ov) s
-113 419 M
-(ve) s
-119 419 M
-(e,) s
-125 419 M
-(, b) s
-137 419 M
-(bu) s
-143 419 M
-(ut) s
-149 419 M
-(t o) s
-161 419 M
-(on) s
-167 419 M
-(nl) s
-173 419 M
-(ly) s
-179 419 M
-(y c) s
-191 419 M
-(co) s
-197 419 M
-(om) s
-203 419 M
-(mp) s
-209 419 M
-(pu) s
-215 419 M
-(ut) s
-221 419 M
-(ti) s
-227 419 M
-(in) s
-233 419 M
-(ng) s
-239 419 M
-(g e) s
-251 419 M
-(ev) s
-257 419 M
-(ve) s
-263 419 M
-(er) s
-269 419 M
-(ry) s
-275 419 M
-(y 5) s
-287 419 M
-(5 p) s
-299 419 M
-(pi) s
-305 419 M
-(ix) s
-311 419 M
-(xe) s
-317 419 M
-(el) s
-323 419 M
-(ls) s
-329 419 M
-(s,) s
-335 419 M
-(, w) s
-347 419 M
-(wi) s
-353 419 M
-(it) s
-359 419 M
-(th) s
-365 419 M
-(h 1) s
-377 419 M
-(1 p) s
-389 419 M
-(pi) s
-395 419 M
-(ix) s
-401 419 M
-(xe) s
-407 419 M
-(el) s
-413 419 M
-(l x) s
-425 419 M
-(x a) s
-437 419 M
-(an) s
-443 419 M
-(nd) s
-449 419 M
-(d  2) s
-467 419 M
-(2) s
+(S) s
 5 408 M
-(       p) s
+(       e) s
 47 408 M
-(pi) s
+(ex) s
 53 408 M
-(ix) s
+(xa) s
 59 408 M
-(xe) s
+(am) s
 65 408 M
-(el) s
+(mp) s
 71 408 M
-(l y) s
+(pl) s
+77 408 M
+(le) s
 83 408 M
-(y o) s
+(e u) s
 95 408 M
-(of) s
+(us) s
 101 408 M
-(ff) s
+(si) s
 107 408 M
-(fs) s
+(in) s
 113 408 M
-(se) s
-119 408 M
-(et) s
-125 408 M
-(ts) s
-131 408 M
-(s,) s
-137 408 M
-(, a) s
-149 408 M
-(an) s
-155 408 M
-(nd) s
-161 408 M
-(d t) s
-173 408 M
-(th) s
-179 408 M
-(he) s
-185 408 M
-(en) s
-191 408 M
-(n i) s
-203 408 M
-(in) s
-209 408 M
-(nt) s
-215 408 M
-(te) s
-221 408 M
-(er) s
-227 408 M
-(rp) s
-233 408 M
-(po) s
-239 408 M
-(ol) s
-245 408 M
-(la) s
-251 408 M
-(at) s
-257 408 M
-(ti) s
-263 408 M
-(in) s
-269 408 M
 (ng) s
+119 408 M
+(g a) s
+131 408 M
+(a s) s
+143 408 M
+(sh) s
+149 408 M
+(hi) s
+155 408 M
+(if) s
+161 408 M
+(ft) s
+167 408 M
+(te) s
+173 408 M
+(ed) s
+179 408 M
+(d i) s
+191 408 M
+(im) s
+197 408 M
+(ma) s
+203 408 M
+(ag) s
+209 408 M
+(ge) s
+215 408 M
+(e i) s
+227 408 M
+(in) s
+233 408 M
+(n a) s
+245 408 M
+(an) s
+251 408 M
+(n I) s
+263 408 M
+(ID) s
+269 408 M
+(DL) s
 275 408 M
-(g:) s
-281 408 M
+(L s) s
+287 408 M
+(se) s
+293 408 M
+(es) s
+299 408 M
+(ss) s
+305 408 M
+(si) s
+311 408 M
+(io) s
+317 408 M
+(on) s
+323 408 M
+(n,) s
+329 408 M
+(, w) s
+341 408 M
+(wi) s
+347 408 M
+(it) s
+353 408 M
+(th) s
+359 408 M
+(h s) s
+371 408 M
+(si) s
+377 408 M
+(ig) s
+383 408 M
+(gm) s
+389 408 M
+(ma) s
+395 408 M
+(a=) s
+401 408 M
+(=1) s
+407 408 M
+(15) s
+413 408 M
+(5:) s
+419 408 M
 (:) s
 5 386 M
-(              IDL>$flct testin.dat testout.dat 1. 1. 15. -s 5p1q2i) s
+(              IDL>f1=randomu\(seed,101,101\)) s
 5 364 M
-(       R) s
-47 364 M
-(Re) s
-53 364 M
-(em) s
-59 364 M
-(mo) s
-65 364 M
-(ov) s
-71 364 M
-(ve) s
-77 364 M
-(e a) s
-89 364 M
-(a n) s
-101 364 M
-(ne) s
-107 364 M
-(et) s
-113 364 M
-(t s) s
-125 364 M
-(sh) s
-131 364 M
-(hi) s
-137 364 M
-(if) s
-143 364 M
-(ft) s
-149 364 M
-(t b) s
-161 364 M
-(be) s
-167 364 M
-(et) s
-173 364 M
-(tw) s
-179 364 M
-(we) s
-185 364 M
-(ee) s
-191 364 M
-(en) s
-197 364 M
-(n i) s
-209 364 M
-(im) s
-215 364 M
-(ma) s
-221 364 M
-(ag) s
-227 364 M
-(ge) s
-233 364 M
-(es) s
-239 364 M
-(s f) s
-251 364 M
-(f1) s
-257 364 M
-(1 a) s
-269 364 M
-(an) s
-275 364 M
-(nd) s
-281 364 M
-(d f) s
-293 364 M
-(f2) s
-299 364 M
-(2,) s
-305 364 M
-(, u) s
-317 364 M
-(us) s
-323 364 M
-(si) s
-329 364 M
-(in) s
-335 364 M
-(ng) s
-341 364 M
-(g s) s
-353 364 M
-(si) s
-359 364 M
-(ig) s
-365 364 M
-(gm) s
-371 364 M
-(ma) s
-377 364 M
-(a=) s
-383 364 M
-(=0) s
-389 364 M
-(0 \() s
-401 364 M
-(\(r) s
-407 364 M
-(re) s
-413 364 M
-(es) s
-419 364 M
-(su) s
-425 364 M
-(ul) s
-431 364 M
-(lt) s
-437 364 M
-(t i) s
-449 364 M
-(in) s
-455 364 M
-(nt) s
-461 364 M
-(to) s
-467 364 M
-(o) s
-5 353 M
-(       f) s
-47 353 M
-(f3) s
-53 353 M
-(3\)) s
-59 353 M
-(\):) s
-65 353 M
-(:) s
-5 331 M
+(              IDL>f2=shift_frac2d\(f1,1.,-1.\)) s
+5 342 M
 (              IDL>vcimage2out,f1,f2,'testin.dat') s
-5 309 M
-(              IDL>$flct testin.dat testout.dat 1. 1. 0 -k 0.5) s
-5 287 M
-(              IDL>vcimage3in,delx,dely,delm,'testout.dat') s
-5 265 M
-(              IDL>f3=shift_frac2d\(f2,-delx,-dely\)) s
-5 243 M
+5 320 M
+(              IDL>$flct testin.dat testout.dat 1. 1. 15.) s
+5 298 M
+(              IDL>vcimage3in,vx,vy,vm,'testout.dat') s
+5 276 M
+(              IDL>shade_surf,vx) s
+5 254 M
+(              IDL>shade_surf,vy) s
+5 232 M
 (       S) s
-47 243 M
+47 232 M
 (Sa) s
-53 243 M
+53 232 M
 (am) s
-59 243 M
+59 232 M
 (me) s
-65 243 M
+65 232 M
 (e a) s
-77 243 M
+77 232 M
 (as) s
-83 243 M
-(s 1) s
-95 243 M
-(1s) s
-101 243 M
-(st) s
-107 243 M
-(t e) s
-119 243 M
-(ex) s
-125 243 M
-(xa) s
-131 243 M
-(am) s
-137 243 M
-(mp) s
-143 243 M
-(pl) s
-149 243 M
-(le) s
-155 243 M
-(e,) s
-161 243 M
-(, b) s
-173 243 M
-(bu) s
-179 243 M
-(ut) s
-185 243 M
-(t u) s
-197 243 M
-(us) s
-203 243 M
-(si) s
-209 243 M
-(in) s
-215 243 M
-(ng) s
-221 243 M
-(g l) s
-233 243 M
-(lo) s
-239 243 M
-(ow) s
-245 243 M
-(w-) s
-251 243 M
-(-p) s
-257 243 M
-(pa) s
-263 243 M
-(as) s
-269 243 M
-(ss) s
-275 243 M
-(s f) s
-287 243 M
-(fi) s
-293 243 M
-(il) s
-299 243 M
-(lt) s
-305 243 M
-(te) s
-311 243 M
-(er) s
-317 243 M
-(ri) s
-323 243 M
-(in) s
-329 243 M
-(ng) s
-335 243 M
-(g,) s
-341 243 M
-(, r) s
-353 243 M
-(ru) s
-359 243 M
-(un) s
-365 243 M
-(n o) s
-377 243 M
-(ou) s
-383 243 M
-(ut) s
-389 243 M
-(ts) s
-395 243 M
-(si) s
-401 243 M
-(id) s
-407 243 M
-(de) s
-413 243 M
-(e o) s
-425 243 M
-(of) s
-431 243 M
-(f I) s
-443 243 M
-(ID) s
-449 243 M
-(DL) s
-455 243 M
-(L:) s
-461 243 M
-(:) s
-5 221 M
-(              flct testin.dat testout.dat 1. 1. 15. -k 0.25) s
-5 199 M
-(       S) s
-47 199 M
-(Sa) s
-53 199 M
-(am) s
-59 199 M
-(me) s
-65 199 M
-(e a) s
-77 199 M
-(as) s
-83 199 M
-(s p) s
-95 199 M
-(pr) s
-101 199 M
-(re) s
-107 199 M
-(ev) s
-113 199 M
-(vi) s
-119 199 M
-(io) s
-125 199 M
-(ou) s
-131 199 M
-(us) s
-137 199 M
-(s,) s
-143 199 M
-(, b) s
-155 199 M
-(bu) s
-161 199 M
-(ut) s
-167 199 M
-(t o) s
-179 199 M
-(on) s
-185 199 M
-(nl) s
-191 199 M
-(ly) s
-197 199 M
-(y c) s
-209 199 M
-(co) s
-215 199 M
-(om) s
-221 199 M
-(mp) s
-227 199 M
-(pu) s
-233 199 M
-(ut) s
-239 199 M
-(te) s
-245 199 M
-(e v) s
-257 199 M
-(ve) s
-263 199 M
-(el) s
-269 199 M
-(l.) s
-275 199 M
-(. f) s
-287 199 M
-(fo) s
-293 199 M
-(or) s
-299 199 M
-(r a) s
-311 199 M
-(av) s
-317 199 M
-(vg) s
-323 199 M
-(g a) s
-335 199 M
-(ab) s
-341 199 M
-(bs) s
-347 199 M
-(s.) s
-353 199 M
-(. i) s
-365 199 M
-(im) s
-371 199 M
-(ma) s
-377 199 M
-(ag) s
-383 199 M
-(ge) s
-389 199 M
-(e v) s
-401 199 M
-(va) s
-407 199 M
-(al) s
-413 199 M
-(lu) s
-419 199 M
-(ue) s
-425 199 M
-(es) s
-431 199 M
+83 232 M
 (s a) s
-443 199 M
+95 232 M
 (ab) s
-449 199 M
+101 232 M
 (bo) s
-455 199 M
+107 232 M
 (ov) s
-461 199 M
+113 232 M
 (ve) s
-467 199 M
-(e) s
-5 188 M
-(       0) s
-47 188 M
-(0.) s
-53 188 M
-(.5) s
-59 188 M
-(5:) s
-65 188 M
-(:) s
-5 166 M
-(              flct testin.dat testout.dat 1. 1. 15. -t 0.5a) s
-5 144 M
-(       P) s
-47 144 M
-(Pr) s
-53 144 M
-(ri) s
-59 144 M
-(in) s
-65 144 M
-(nt) s
-71 144 M
-(t o) s
-83 144 M
-(ou) s
-89 144 M
+119 232 M
+(e,) s
+125 232 M
+(, b) s
+137 232 M
+(bu) s
+143 232 M
 (ut) s
-95 144 M
-(t s) s
-107 144 M
-(sh) s
-113 144 M
-(ho) s
-119 144 M
-(or) s
-125 144 M
-(rt) s
-131 144 M
-(t s) s
-143 144 M
-(su) s
-149 144 M
-(um) s
-155 144 M
-(mm) s
-161 144 M
-(ma) s
-167 144 M
-(ar) s
-173 144 M
-(ry) s
-179 144 M
-(y o) s
-191 144 M
-(of) s
-197 144 M
-(f d) s
-209 144 M
-(do) s
-215 144 M
-(oc) s
-221 144 M
-(cu) s
-227 144 M
-(um) s
-233 144 M
-(me) s
-239 144 M
-(en) s
-245 144 M
-(nt) s
-251 144 M
-(ta) s
-257 144 M
-(at) s
-263 144 M
-(ti) s
-269 144 M
-(io) s
-275 144 M
+149 232 M
+(t o) s
+161 232 M
 (on) s
-281 144 M
-(n:) s
-287 144 M
+167 232 M
+(nl) s
+173 232 M
+(ly) s
+179 232 M
+(y c) s
+191 232 M
+(co) s
+197 232 M
+(om) s
+203 232 M
+(mp) s
+209 232 M
+(pu) s
+215 232 M
+(ut) s
+221 232 M
+(ti) s
+227 232 M
+(in) s
+233 232 M
+(ng) s
+239 232 M
+(g e) s
+251 232 M
+(ev) s
+257 232 M
+(ve) s
+263 232 M
+(er) s
+269 232 M
+(ry) s
+275 232 M
+(y 5) s
+287 232 M
+(5 p) s
+299 232 M
+(pi) s
+305 232 M
+(ix) s
+311 232 M
+(xe) s
+317 232 M
+(el) s
+323 232 M
+(ls) s
+329 232 M
+(s,) s
+335 232 M
+(, a) s
+347 232 M
+(an) s
+353 232 M
+(nd) s
+359 232 M
+(d t) s
+371 232 M
+(th) s
+377 232 M
+(he) s
+383 232 M
+(en) s
+389 232 M
+(n  i) s
+407 232 M
+(in) s
+413 232 M
+(nt) s
+419 232 M
+(te) s
+425 232 M
+(er) s
+431 232 M
+(rp) s
+437 232 M
+(po) s
+443 232 M
+(ol) s
+449 232 M
+(la) s
+455 232 M
+(at) s
+461 232 M
+(t-) s
+467 232 M
+(-) s
+5 221 M
+(       i) s
+47 221 M
+(in) s
+53 221 M
+(ng) s
+59 221 M
+(g:) s
+65 221 M
 (:) s
+5 199 M
+(              IDL>$flct testin.dat testout.dat 1. 1. 15. -s 5i) s
+5 177 M
+(       S) s
+47 177 M
+(Sa) s
+53 177 M
+(am) s
+59 177 M
+(me) s
+65 177 M
+(e  a) s
+83 177 M
+(as) s
+89 177 M
+(s a) s
+101 177 M
+(ab) s
+107 177 M
+(bo) s
+113 177 M
+(ov) s
+119 177 M
+(ve) s
+125 177 M
+(e,) s
+131 177 M
+(, b) s
+143 177 M
+(bu) s
+149 177 M
+(ut) s
+155 177 M
+(t o) s
+167 177 M
+(on) s
+173 177 M
+(nl) s
+179 177 M
+(ly) s
+185 177 M
+(y c) s
+197 177 M
+(co) s
+203 177 M
+(om) s
+209 177 M
+(mp) s
+215 177 M
+(pu) s
+221 177 M
+(ut) s
+227 177 M
+(ti) s
+233 177 M
+(in) s
+239 177 M
+(ng) s
+245 177 M
+(g e) s
+257 177 M
+(ev) s
+263 177 M
+(ve) s
+269 177 M
+(er) s
+275 177 M
+(ry) s
+281 177 M
+(y 5) s
+293 177 M
+(5 p) s
+305 177 M
+(pi) s
+311 177 M
+(ix) s
+317 177 M
+(xe) s
+323 177 M
+(el) s
+329 177 M
+(ls) s
+335 177 M
+(s,) s
+341 177 M
+(, w) s
+353 177 M
+(wi) s
+359 177 M
+(it) s
+365 177 M
+(th) s
+371 177 M
+(h 1) s
+383 177 M
+(1 p) s
+395 177 M
+(pi) s
+401 177 M
+(ix) s
+407 177 M
+(xe) s
+413 177 M
+(el) s
+419 177 M
+(l x) s
+431 177 M
+(x a) s
+443 177 M
+(an) s
+449 177 M
+(nd) s
+455 177 M
+(d 2) s
+467 177 M
+(2) s
+5 166 M
+(       p) s
+47 166 M
+(pi) s
+53 166 M
+(ix) s
+59 166 M
+(xe) s
+65 166 M
+(el) s
+71 166 M
+(l y) s
+83 166 M
+(y o) s
+95 166 M
+(of) s
+101 166 M
+(ff) s
+107 166 M
+(fs) s
+113 166 M
+(se) s
+119 166 M
+(et) s
+125 166 M
+(ts) s
+131 166 M
+(s,) s
+137 166 M
+(, a) s
+149 166 M
+(an) s
+155 166 M
+(nd) s
+161 166 M
+(d t) s
+173 166 M
+(th) s
+179 166 M
+(he) s
+185 166 M
+(en) s
+191 166 M
+(n i) s
+203 166 M
+(in) s
+209 166 M
+(nt) s
+215 166 M
+(te) s
+221 166 M
+(er) s
+227 166 M
+(rp) s
+233 166 M
+(po) s
+239 166 M
+(ol) s
+245 166 M
+(la) s
+251 166 M
+(at) s
+257 166 M
+(ti) s
+263 166 M
+(in) s
+269 166 M
+(ng) s
+275 166 M
+(g:) s
+281 166 M
+(:) s
+5 144 M
+(              IDL>$flct testin.dat testout.dat 1. 1. 15. -s 5p1q2i) s
 5 122 M
-(              flct) s
-5 89 M
-(F) s
-5 89 M
-(FI) s
-11 89 M
-(IL) s
-17 89 M
-(LE) s
-23 89 M
-(ES) s
-29 89 M
-(S) s
-5 78 M
-(       There are no configuration files.) s
-5 45 M
-(K) s
-5 45 M
-(KN) s
-11 45 M
-(NO) s
-17 45 M
-(OW) s
-23 45 M
-(WN) s
-29 45 M
-(N L) s
-41 45 M
-(LI) s
-47 45 M
-(IM) s
-53 45 M
-(MI) s
-59 45 M
-(IT) s
-65 45 M
-(TA) s
-71 45 M
-(AT) s
-77 45 M
-(TI) s
-83 45 M
-(IO) s
-89 45 M
-(ON) s
-95 45 M
-(NS) s
-101 45 M
-(S) s
-5 34 M
+(       R) s
+47 122 M
+(Re) s
+53 122 M
+(em) s
+59 122 M
+(mo) s
+65 122 M
+(ov) s
+71 122 M
+(ve) s
+77 122 M
+(e a) s
+89 122 M
+(a n) s
+101 122 M
+(ne) s
+107 122 M
+(et) s
+113 122 M
+(t s) s
+125 122 M
+(sh) s
+131 122 M
+(hi) s
+137 122 M
+(if) s
+143 122 M
+(ft) s
+149 122 M
+(t b) s
+161 122 M
+(be) s
+167 122 M
+(et) s
+173 122 M
+(tw) s
+179 122 M
+(we) s
+185 122 M
+(ee) s
+191 122 M
+(en) s
+197 122 M
+(n i) s
+209 122 M
+(im) s
+215 122 M
+(ma) s
+221 122 M
+(ag) s
+227 122 M
+(ge) s
+233 122 M
+(es) s
+239 122 M
+(s f) s
+251 122 M
+(f1) s
+257 122 M
+(1 a) s
+269 122 M
+(an) s
+275 122 M
+(nd) s
+281 122 M
+(d f) s
+293 122 M
+(f2) s
+299 122 M
+(2,) s
+305 122 M
+(, u) s
+317 122 M
+(us) s
+323 122 M
+(si) s
+329 122 M
+(in) s
+335 122 M
+(ng) s
+341 122 M
+(g s) s
+353 122 M
+(si) s
+359 122 M
+(ig) s
+365 122 M
+(gm) s
+371 122 M
+(ma) s
+377 122 M
+(a=) s
+383 122 M
+(=0) s
+389 122 M
+(0 \() s
+401 122 M
+(\(r) s
+407 122 M
+(re) s
+413 122 M
+(es) s
+419 122 M
+(su) s
+425 122 M
+(ul) s
+431 122 M
+(lt) s
+437 122 M
+(t i) s
+449 122 M
+(in) s
+455 122 M
+(nt) s
+461 122 M
+(to) s
+467 122 M
+(o) s
+5 111 M
 (       f) s
-47 34 M
-(fl) s
-53 34 M
-(lc) s
-59 34 M
-(ct) s
-65 34 M
-(t  is unable to find flows that are normal to image gradients.  This) s
+47 111 M
+(f3) s
+53 111 M
+(3\)) s
+59 111 M
+(\):) s
+65 111 M
+(:) s
+5 89 M
+(              IDL>vcimage2out,f1,f2,'testin.dat') s
+5 67 M
+(              IDL>$flct testin.dat testout.dat 1. 1. 0 -k 0.5) s
+5 45 M
+(              IDL>vcimage3in,delx,dely,delm,'testout.dat') s
 5 23 M
-(       is a defect of the LCT concept.) s
+(              IDL>f3=shift_frac2d\(f2,-delx,-dely\)) s
 _R
 S
 %%Page: (4) 4
@@ -2396,7 +2102,7 @@ _S
 /fdir (.) def
 /ftail (.) def
 % User defined strings:
-/fmodstr (Tue Nov 28 15:09:19 2017) def
+/fmodstr (Mon Feb 12 05:37:26 2018) def
 /pagenumstr (4) def
 /user_header_p true def
 /user_header_left_str () def
@@ -2406,199 +2112,589 @@ _S
 %%EndPageSetup
 do_header
 5 716 M
-(       f) s
+(       S) s
 47 716 M
-(fl) s
+(Sa) s
 53 716 M
-(lc) s
+(am) s
 59 716 M
-(ct) s
+(me) s
 65 716 M
-(t cannot determine velocities on scales  below  the  scale  size  of) s
-5 705 M
-(       structures in the images.  This is a defect of the LCT concept.) s
-5 683 M
-(       Images  that  have  minimal  structure  can  give  nonsensical velocity) s
-5 672 M
-(       results.) s
-5 650 M
-(       Results can depend on value of sigma.  User must experiment  to  deter-) s
-5 639 M
-(       mine best choice of sigma.) s
-5 617 M
-(       Velocities  corresponding  to  shifts  less than 0.1-0.2 pixels are not) s
-5 606 M
-(       always detected.  It may be necessary to increase the  amount  of  time) s
-5 595 M
-(       between  images, depending on the noise level in the images.  Sometimes) s
-5 584 M
-(       using the filtering option helps.) s
-5 562 M
-(       Velocities computed within _) s
-209 562 M
-(s_) s
-215 562 M
-(i_) s
-221 562 M
-(g_) s
-227 562 M
-(m_) s
-233 562 M
-(a pixels of the image edges can be unre-) s
-5 551 M
-(       liable.) s
-5 529 M
-(       Noisy  images can result in spurious velocity results unless a suitable) s
-5 518 M
-(       threshold value _) s
-143 518 M
-(t_) s
-149 518 M
-(h_) s
-155 518 M
-(r_) s
-161 518 M
-(e_) s
-167 518 M
-(s_) s
-173 518 M
-(h is chosen.) s
-5 485 M
-(A) s
-5 485 M
-(AU) s
-11 485 M
-(UT) s
-17 485 M
-(TH) s
-23 485 M
-(HO) s
-29 485 M
-(OR) s
-35 485 M
-(RS) s
-41 485 M
-(S) s
-5 474 M
-(       George H. Fisher, SSL UC Berkeley <fisher at ssl dot berkeley dot  edu>) s
-5 463 M
-(       Brian T. Welsch, SSL UC Berkeley <welsch at ssl dot berkeley dot edu>) s
-5 441 M
-(S) s
-5 441 M
-(SE) s
-11 441 M
-(EE) s
-17 441 M
-(E A) s
-29 441 M
-(AL) s
-35 441 M
-(LS) s
-41 441 M
-(SO) s
-47 441 M
-(O) s
-5 430 M
-(       source  code  of  v) s
-155 430 M
-(vc) s
-161 430 M
-(ci) s
-167 430 M
-(im) s
-173 430 M
-(ma) s
-179 430 M
-(ag) s
-185 430 M
-(ge) s
-191 430 M
-(e2) s
-197 430 M
-(2o) s
-203 430 M
-(ou) s
-209 430 M
+(e a) s
+77 716 M
+(as) s
+83 716 M
+(s 1) s
+95 716 M
+(1s) s
+101 716 M
+(st) s
+107 716 M
+(t e) s
+119 716 M
+(ex) s
+125 716 M
+(xa) s
+131 716 M
+(am) s
+137 716 M
+(mp) s
+143 716 M
+(pl) s
+149 716 M
+(le) s
+155 716 M
+(e,) s
+161 716 M
+(, b) s
+173 716 M
+(bu) s
+179 716 M
 (ut) s
-215 430 M
-(t.) s
-221 430 M
-(.p) s
-227 430 M
-(pr) s
-233 430 M
-(ro) s
-239 430 M
-(o \(IDL procedure\), source code of v) s
-443 430 M
-(vc) s
-449 430 M
-(ci) s
-455 430 M
-(im) s
-461 430 M
-(m-) s
-467 430 M
-(-) s
-5 419 M
-(       a) s
-47 419 M
-(ag) s
-53 419 M
-(ge) s
-59 419 M
-(e3) s
-65 419 M
-(3i) s
-71 419 M
+185 716 M
+(t u) s
+197 716 M
+(us) s
+203 716 M
+(si) s
+209 716 M
 (in) s
-77 419 M
-(n.) s
-83 419 M
-(.p) s
-89 419 M
+215 716 M
+(ng) s
+221 716 M
+(g l) s
+233 716 M
+(lo) s
+239 716 M
+(ow) s
+245 716 M
+(w-) s
+251 716 M
+(-p) s
+257 716 M
+(pa) s
+263 716 M
+(as) s
+269 716 M
+(ss) s
+275 716 M
+(s f) s
+287 716 M
+(fi) s
+293 716 M
+(il) s
+299 716 M
+(lt) s
+305 716 M
+(te) s
+311 716 M
+(er) s
+317 716 M
+(ri) s
+323 716 M
+(in) s
+329 716 M
+(ng) s
+335 716 M
+(g,) s
+341 716 M
+(, r) s
+353 716 M
+(ru) s
+359 716 M
+(un) s
+365 716 M
+(n o) s
+377 716 M
+(ou) s
+383 716 M
+(ut) s
+389 716 M
+(ts) s
+395 716 M
+(si) s
+401 716 M
+(id) s
+407 716 M
+(de) s
+413 716 M
+(e o) s
+425 716 M
+(of) s
+431 716 M
+(f I) s
+443 716 M
+(ID) s
+449 716 M
+(DL) s
+455 716 M
+(L:) s
+461 716 M
+(:) s
+5 694 M
+(              flct testin.dat testout.dat 1. 1. 15. -k 0.25) s
+5 672 M
+(       S) s
+47 672 M
+(Sa) s
+53 672 M
+(am) s
+59 672 M
+(me) s
+65 672 M
+(e a) s
+77 672 M
+(as) s
+83 672 M
+(s p) s
+95 672 M
 (pr) s
-95 419 M
-(ro) s
-101 419 M
-(o \(IDL procedure\), and source code  of  s) s
-341 419 M
+101 672 M
+(re) s
+107 672 M
+(ev) s
+113 672 M
+(vi) s
+119 672 M
+(io) s
+125 672 M
+(ou) s
+131 672 M
+(us) s
+137 672 M
+(s,) s
+143 672 M
+(, b) s
+155 672 M
+(bu) s
+161 672 M
+(ut) s
+167 672 M
+(t o) s
+179 672 M
+(on) s
+185 672 M
+(nl) s
+191 672 M
+(ly) s
+197 672 M
+(y c) s
+209 672 M
+(co) s
+215 672 M
+(om) s
+221 672 M
+(mp) s
+227 672 M
+(pu) s
+233 672 M
+(ut) s
+239 672 M
+(te) s
+245 672 M
+(e v) s
+257 672 M
+(ve) s
+263 672 M
+(el) s
+269 672 M
+(l.) s
+275 672 M
+(. f) s
+287 672 M
+(fo) s
+293 672 M
+(or) s
+299 672 M
+(r a) s
+311 672 M
+(av) s
+317 672 M
+(vg) s
+323 672 M
+(g a) s
+335 672 M
+(ab) s
+341 672 M
+(bs) s
+347 672 M
+(s.) s
+353 672 M
+(. i) s
+365 672 M
+(im) s
+371 672 M
+(ma) s
+377 672 M
+(ag) s
+383 672 M
+(ge) s
+389 672 M
+(e v) s
+401 672 M
+(va) s
+407 672 M
+(al) s
+413 672 M
+(lu) s
+419 672 M
+(ue) s
+425 672 M
+(es) s
+431 672 M
+(s a) s
+443 672 M
+(ab) s
+449 672 M
+(bo) s
+455 672 M
+(ov) s
+461 672 M
+(ve) s
+467 672 M
+(e) s
+5 661 M
+(       0) s
+47 661 M
+(0.) s
+53 661 M
+(.5) s
+59 661 M
+(5:) s
+65 661 M
+(:) s
+5 639 M
+(              flct testin.dat testout.dat 1. 1. 15. -t 0.5a) s
+5 617 M
+(       P) s
+47 617 M
+(Pr) s
+53 617 M
+(ri) s
+59 617 M
+(in) s
+65 617 M
+(nt) s
+71 617 M
+(t o) s
+83 617 M
+(ou) s
+89 617 M
+(ut) s
+95 617 M
+(t s) s
+107 617 M
 (sh) s
-347 419 M
-(hi) s
-353 419 M
-(if) s
-359 419 M
-(ft) s
-365 419 M
-(t_) s
-371 419 M
-(_f) s
-377 419 M
-(fr) s
-383 419 M
-(ra) s
-389 419 M
-(ac) s
-395 419 M
-(c2) s
-401 419 M
-(2d) s
-407 419 M
-(d.) s
-413 419 M
-(.p) s
-419 419 M
-(pr) s
-425 419 M
-(ro) s
-431 419 M
-(o  \(IDL) s
+113 617 M
+(ho) s
+119 617 M
+(or) s
+125 617 M
+(rt) s
+131 617 M
+(t s) s
+143 617 M
+(su) s
+149 617 M
+(um) s
+155 617 M
+(mm) s
+161 617 M
+(ma) s
+167 617 M
+(ar) s
+173 617 M
+(ry) s
+179 617 M
+(y o) s
+191 617 M
+(of) s
+197 617 M
+(f d) s
+209 617 M
+(do) s
+215 617 M
+(oc) s
+221 617 M
+(cu) s
+227 617 M
+(um) s
+233 617 M
+(me) s
+239 617 M
+(en) s
+245 617 M
+(nt) s
+251 617 M
+(ta) s
+257 617 M
+(at) s
+263 617 M
+(ti) s
+269 617 M
+(io) s
+275 617 M
+(on) s
+281 617 M
+(n:) s
+287 617 M
+(:) s
+5 595 M
+(              flct) s
+5 562 M
+(F) s
+5 562 M
+(FI) s
+11 562 M
+(IL) s
+17 562 M
+(LE) s
+23 562 M
+(ES) s
+29 562 M
+(S) s
+5 551 M
+(       There are no configuration files.) s
+5 518 M
+(K) s
+5 518 M
+(KN) s
+11 518 M
+(NO) s
+17 518 M
+(OW) s
+23 518 M
+(WN) s
+29 518 M
+(N L) s
+41 518 M
+(LI) s
+47 518 M
+(IM) s
+53 518 M
+(MI) s
+59 518 M
+(IT) s
+65 518 M
+(TA) s
+71 518 M
+(AT) s
+77 518 M
+(TI) s
+83 518 M
+(IO) s
+89 518 M
+(ON) s
+95 518 M
+(NS) s
+101 518 M
+(S) s
+5 507 M
+(       f) s
+47 507 M
+(fl) s
+53 507 M
+(lc) s
+59 507 M
+(ct) s
+65 507 M
+(t is unable to find flows that are normal to image gradients.   This) s
+5 496 M
+(       is a defect of the LCT concept.) s
+5 474 M
+(       f) s
+47 474 M
+(fl) s
+53 474 M
+(lc) s
+59 474 M
+(ct) s
+65 474 M
+(t  cannot  determine  velocities  on  scales below the scale size of) s
+5 463 M
+(       structures in the images.  This is a defect of the LCT concept.) s
+5 441 M
+(       Images that  have  minimal  structure  can  give  nonsensical  velocity) s
+5 430 M
+(       results.) s
 5 408 M
-(       procedure\).) s
+(       Results  can  depend on value of sigma.  User must experiment to deter-) s
+5 397 M
+(       mine best choice of sigma.) s
+5 375 M
+(       Velocities corresponding to shifts less than  0.1-0.2  pixels  are  not) s
 5 364 M
-(Unix/Linux                       NOVEMBER 2017                      FLCT\(1.04\)) s
+(       always  detected.   It  may be necessary to increase the amount of time) s
+5 353 M
+(       between images, depending on the noise level in the images.   Sometimes) s
+5 342 M
+(       using the filtering option helps.) s
+5 320 M
+(       Velocities computed within _) s
+209 320 M
+(s_) s
+215 320 M
+(i_) s
+221 320 M
+(g_) s
+227 320 M
+(m_) s
+233 320 M
+(a pixels of the image edges can be unre-) s
+5 309 M
+(       liable.) s
+5 287 M
+(       Noisy images can result in spurious velocity results unless a  suitable) s
+5 276 M
+(       threshold value _) s
+143 276 M
+(t_) s
+149 276 M
+(h_) s
+155 276 M
+(r_) s
+161 276 M
+(e_) s
+167 276 M
+(s_) s
+173 276 M
+(h is chosen.) s
+5 243 M
+(A) s
+5 243 M
+(AU) s
+11 243 M
+(UT) s
+17 243 M
+(TH) s
+23 243 M
+(HO) s
+29 243 M
+(OR) s
+35 243 M
+(RS) s
+41 243 M
+(S) s
+5 232 M
+(       George  H. Fisher, SSL UC Berkeley <fisher at ssl dot berkeley dot edu>) s
+5 221 M
+(       Brian T. Welsch, SSL UC Berkeley <welsch at ssl dot berkeley dot edu>) s
+5 199 M
+(S) s
+5 199 M
+(SE) s
+11 199 M
+(EE) s
+17 199 M
+(E A) s
+29 199 M
+(AL) s
+35 199 M
+(LS) s
+41 199 M
+(SO) s
+47 199 M
+(O) s
+5 188 M
+(       source code of v) s
+137 188 M
+(vc) s
+143 188 M
+(ci) s
+149 188 M
+(im) s
+155 188 M
+(ma) s
+161 188 M
+(ag) s
+167 188 M
+(ge) s
+173 188 M
+(e2) s
+179 188 M
+(2o) s
+185 188 M
+(ou) s
+191 188 M
+(ut) s
+197 188 M
+(t.) s
+203 188 M
+(.p) s
+209 188 M
+(pr) s
+215 188 M
+(ro) s
+221 188 M
+(o \(IDL procedure\), source  code  of  v) s
+443 188 M
+(vc) s
+449 188 M
+(ci) s
+455 188 M
+(im) s
+461 188 M
+(m-) s
+467 188 M
+(-) s
+5 177 M
+(       a) s
+47 177 M
+(ag) s
+53 177 M
+(ge) s
+59 177 M
+(e3) s
+65 177 M
+(3i) s
+71 177 M
+(in) s
+77 177 M
+(n.) s
+83 177 M
+(.p) s
+89 177 M
+(pr) s
+95 177 M
+(ro) s
+101 177 M
+(o  \(IDL  procedure\),  and source code of s) s
+347 177 M
+(sh) s
+353 177 M
+(hi) s
+359 177 M
+(if) s
+365 177 M
+(ft) s
+371 177 M
+(t_) s
+377 177 M
+(_f) s
+383 177 M
+(fr) s
+389 177 M
+(ra) s
+395 177 M
+(ac) s
+401 177 M
+(c2) s
+407 177 M
+(2d) s
+413 177 M
+(d.) s
+419 177 M
+(.p) s
+425 177 M
+(pr) s
+431 177 M
+(ro) s
+437 177 M
+(o \(IDL) s
+5 166 M
+(       procedure\).) s
+5 122 M
+(Unix/Linux                       JANUARY 2018                       FLCT\(1.06\)) s
 _R
 S
 %%Trailer

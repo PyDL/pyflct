@@ -1,14 +1,14 @@
 .\" Process this file with
 .\" groff -man -Tascii foo.1
 .\"
-.TH FLCT 1.04     "NOVEMBER 2017" Unix/Linux "User Manuals"
+.TH FLCT 1.06     "JANUARY 2018" Unix/Linux "User Manuals"
 .SH NAME
 flct \- perform local correlation tracking between 2 images
 .SH SYNOPSIS
 .B flct 
 .I in-file out-file deltat deltas sigma 
 .B [
-.I -t thresh -k kr -s N[pP][qQ][i] -pc latmin latmax -h -q
+.I -t thresh -k kr -s N[pP][qQ][i] -pc latmin latmax -h -bc -q
 .B ]
 .B ...
 .SH DESCRIPTION
@@ -164,6 +164,9 @@ Empirically, setting
 / 2 pixels and then interpolating compares poorly with calculations performed
 at every gridpoint.
 
+If using the skip option while also using the "Plate Carree" option (see
+below), you must also use the interpolation sub-option described above.
+
 .IP -h
 If this "high resolution" flag is set, cubic convolution interpolation 
 is performed to 0.1 pixel precision before Taylor expansion is done to
@@ -180,6 +183,24 @@ is run, and the resulting velocities are interpolated back to Plate Carree
 coordinates, with cos(latitude) modulation.  The limits latmin and latmax
 are assumed to be given in radians, unless they end in 'd', in which case
 they are assumed to be in degrees, and will then be converted to radians.
+Because of possible artifacts in low-signal regions of the image
+due to the interpolation algorithm, we strongly recommend using the 
+thresholding option ("-t thresh") when using the Plate Carree option.
+
+If sigma is set to 0 when the Plate Carree option is set, then single values
+of the x and y shifts are returned, and a single value of 0.5 is returned as
+the mask value.  The x and y shifts are modulated by the cosine
+of the average latitude, coinciding with the centroid of the image in pixel
+space.
+
+.IP -bc
+If this flag is set, an attempt is made to correct the bias
+that under-estimates velocity amplitudes.  This bias is intrinsic to the FLCT
+algorithm. The bias correction algorithm that is implemented uses the Hessian
+determinant, and the assumed value of sigma, to adjust the x-and-y velocities.
+More detail is given in the file 
+.B bias_correction_in_flct.txt 
+in the FLCT distribution.
 
 .IP -q
 If this flag is set, no non-error output is sent to

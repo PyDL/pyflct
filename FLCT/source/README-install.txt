@@ -16,6 +16,21 @@ complex.h, you can uncomment the line /* #DEFINE COMPLEXH 1 */in the file
 flctsubs.h .  The source code contains C pre-processor directives which should
 then compile all the source code with complex.h included.
 
+By default, flct will not write out any information about the cross-correlation
+function.  But you can choose to output some of this information by uncommenting
+the line /* #define CCDATA 1 */.  If this is done, the flct function will
+write out two files, deriv2.dat and deriv1.dat, which will contain the 3
+second derivatives, and the peak value and first derivatives of the cross
+correlation function all evaluated near its peak.
+
+We have also modified the source code to include an experimental "bias
+correction" option, which can be invoked by using the option -bc
+when running the flct executable.  If this option is
+invoked, then bias correction is turned on.  The bias correction works by
+estimating the effect of multiplying an unshifted gaussian of width sigma
+by the shifted image f2 when computing the sub-images S_1 and S_2 (see Fisher
+and Welsch, 2008), and then attempting to correct for it.
+
 To compile the flct and warp executables, first examine the file "Makefile"
 and edit it as necessary, paying attention to the definitions of FLCT_BINDIR,
 FLCT_MANDIR, FLCT_INCLUDEDIR, FLCT_LIBDIR, which is where the executables,

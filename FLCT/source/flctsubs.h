@@ -1,7 +1,7 @@
 /*
 
  FLCT: http://solarmuri.ssl.berkeley.edu/overview/publicdownloads/software.html
- Copyright (C) 2007-2017 Regents of the University of California
+ Copyright (C) 2007-2018 Regents of the University of California
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 # include <stdio.h>
 # include <string.h>
+# include <ctype.h>
 # include <stdlib.h>
 # include <math.h>
 
@@ -35,6 +36,12 @@
 #endif
 
 # include <fftw3.h> 
+
+/* To write files deriv2.dat and deriv1.dat, containing 2nd derivatives of
+the cross-correlation function, and the peak value and first derivatives,
+uncomment the line below defining CCDATA: */
+
+/* # define CCDATA 1 */
 
 /* global declarations */
 
@@ -52,28 +59,28 @@ void flct_f77__(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx,
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter,
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     i4 * verbose);
+     i4 * biascor, i4 * verbose);
 void flct_f77_(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx,
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter,
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     i4 * verbose);
+     i4 * biascor, i4 * verbose);
 void flct_f77(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx,
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter,
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     i4 * verbose);
+     i4 * biascor, i4 * verbose);
 i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
     double deltas, double sigma, double * vx, double * vy, double * vm,
     double thresh, i4 absflag, i4 filter, double kr, i4 skip,
-    i4 poffset, i4 qoffset, i4 interpolate, i4 verbose);
+    i4 poffset, i4 qoffset, i4 interpolate, i4 biascor, i4 verbose);
 i4 readimage (char *fname, i4 *nx, i4 * ny, double **arr, i4 transp);
 i4 read2images (char *fname, i4 * nx, i4 * ny, double **arr, double **barr,
 		i4 transp);
 i4 where (char *cond, i4 xsize, i4 ** index, i4 * length_index);
 i4 cross_cor (i4 init, i4 hires, i4 expand, double *arr, double *barr,
 	   double **absccor, i4 nx, i4 ny, double *shiftx, double *shifty, 
-           i4 filterflag, double kr);
+           i4 filterflag, double kr, double sigma);
 i4 writeimage (char *fname, double *arr, i4 nx, i4 ny, i4 transp);
 i4 write2images (char *fname, double *arr, double *barr, i4 nx, i4 ny,
 		 i4 transp);
@@ -99,22 +106,22 @@ i4 flct_pc (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
     double deltas, double sigma, double * vx, double * vy, double * vm,
     double thresh, i4 absflag, i4 filter, double kr, i4 skip,
     i4 poffset, i4 qoffset, i4 interpolate, double latmin, double latmax,
-    i4 verbose);
+    i4 biascor, i4 verbose);
 void flct_pc_f77__(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx,
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter,
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     double * latmin, double * latmax, i4 * verbose);
+     double * latmin, double * latmax, i4 * biascor, i4 * verbose);
 void flct_pc_f77_(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx,
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter,
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     double * latmin, double * latmax, i4 * verbose);
+     double * latmin, double * latmax, i4 * biascor, i4 * verbose);
 void flct_pc_f77(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx,
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter,
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     double * latmin, double * latmax, i4 * verbose);
+     double * latmin, double * latmax, i4 * biascor, i4 * verbose);
 i4 mc2pc(i4 transp, double *f, i4 nxinterp, i4 nyinterp, double umin,
          double umax, double vmin, double vmax, double ** finterp, i4 nx,
          i4 ny);

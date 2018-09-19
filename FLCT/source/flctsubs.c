@@ -1,7 +1,7 @@
 /*
 
  FLCT: http://solarmuri.ssl.berkeley.edu/overview/publicdownloads/software.html
- Copyright (C) 2007-2017 Regents of the University of California
+ Copyright (C) 2007-2018 Regents of the University of California
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ void flct_f77__(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx, 
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter, 
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     i4 * verbose)
+     i4 * biascor, i4 * verbose)
 
 {
 i4 ierflct;
@@ -35,7 +35,7 @@ i4 ierflct;
 
 ierflct=flct(*transp,f1,f2,*nx,*ny,*deltat,*deltas,*sigma,vx,vy,vm,
      *thresh,*absflag,*filter,*kr,*skip,*poffset,*qoffset,*interpolate,
-     *verbose);
+     *biascor,*verbose);
 
 return;
 }
@@ -44,7 +44,7 @@ void flct_f77_(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx, 
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter, 
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     i4 * verbose)
+     i4 * biascor, i4 * verbose)
 
 {
 i4 ierflct;
@@ -54,7 +54,7 @@ i4 ierflct;
 
 ierflct=flct(*transp,f1,f2,*nx,*ny,*deltat,*deltas,*sigma,vx,vy,vm,
      *thresh,*absflag,*filter,*kr,*skip,*poffset,*qoffset,*interpolate,
-     *verbose);
+     *biascor,*verbose);
 
 return;
 }
@@ -63,7 +63,7 @@ void flct_f77(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx, 
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter, 
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     i4 * verbose)
+     i4 * biascor, i4 * verbose)
 
 {
 i4 ierflct;
@@ -73,7 +73,7 @@ i4 ierflct;
 
 ierflct=flct(*transp,f1,f2,*nx,*ny,*deltat,*deltas,*sigma,vx,vy,vm,
      *thresh,*absflag,*filter,*kr,*skip,*poffset,*qoffset,*interpolate,
-     *verbose);
+     *biascor,*verbose);
 
 return;
 }
@@ -81,12 +81,12 @@ return;
 i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat, 
     double deltas, double sigma, double * vx, double * vy, double * vm,
     double thresh, i4 absflag, i4 filter, double kr, i4 skip,
-    i4 poffset, i4 qoffset, i4 interpolate, i4 verbose) 
+    i4 poffset, i4 qoffset, i4 interpolate, i4 biascor, i4 verbose) 
 {
 
 /* BEGIN FLCT FUNCTION */
 
-/*  char *version ="1.04    "; */
+/*  char *version ="1.05    "; */
 
   i4 hires=-1, expand=1, sigmaeq0;
   i4 nxtmp, nytmp, nxorig, nyorig, i, j, ii, jj, ic, jc, ixcount=0, iycount=0;
@@ -105,6 +105,16 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
   double tol = 1e-2;
   double xmiss = -999999.;
   i4 hardworkneeded, belowthresh;
+#ifdef CCDATA
+  char *gamfile="deriv2.dat";
+  char *peakfile="deriv1.dat";
+#endif
+  i4 maxind,ixmax,iymax,absccmax,nsig;
+  double gamx2val,gamy2val,gamxyval,
+     gamxval,gamyval, gampeakval;
+  double *gamx2=NULL, *gamy2=NULL, *gamx=NULL, *gamy=NULL, *gamxy=NULL, 
+     *gampeak=NULL;
+  double fx,fy,fxx,fyy,fxy,fpeak,hessian,hm1over2,corfac,gam2oversigma2;
 
 /* First, need to interchange roles of nx, ny if (transp) is true: */
 
@@ -143,11 +153,15 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
      nt = (i4) sigma *sqrt (log (1. / tol));
      ndmin = (nx < ny) ? (((nx / 3) / 2)) * 2 : (((ny / 3) / 2)) * 2;
      nsize = ((nt / 2) * 2 < ndmin) ? (nt / 2) * 2 : ndmin;
-     if (verbose) printf ("flct: nominal sliding box size = %d\n", 
-        2 * nsize);
+     if (verbose) 
+     {
+       printf ("flct: nominal sliding box size = %d\n", 2 * nsize);
+       fflush(stdout);
+     }
      if(nsize <= 0)
      {
         printf("flct: error - illegal box size, exiting\n");
+        fflush(stdout);
         exit(1);
      }
   }
@@ -195,6 +209,7 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
         thresh *= fmax;
         if (verbose) 
            printf ("flct: relative threshold in abs. units = %g\n", thresh);
+           fflush(stdout);
 
         free (f1temp);
         free (f2temp);
@@ -229,6 +244,12 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
   /* Now create master gaussian image mask: */
 
   gaussdata = (double *) malloc (sizeof (double) * (2 * nxorig) * (2 * nyorig));
+  gamx= (double *) malloc( sizeof(double) * nx * ny);
+  gamy= (double *) malloc( sizeof(double) * nx * ny);
+  gamx2= (double *) malloc( sizeof(double) * nx * ny);
+  gamy2= (double *) malloc( sizeof(double) * nx * ny);
+  gamxy= (double *) malloc( sizeof(double) * nx * ny);
+  gampeak=(double *) malloc( sizeof(double) * nx * ny);
 
   if(!sigmaeq0) /* this case for sigma > 0 */
   {
@@ -257,6 +278,9 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
       /*
       writeimage("gaussdata.dat",gaussdata,2*nxorig,2*nyorig,transp);
       */
+
+  gam2oversigma2=0.;
+  nsig=0;
 
   /* Now do the master loop over i,j for computing velocity field: */
 
@@ -455,7 +479,8 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
 	       * shift of image g2 relative to g1: */
 
 	      icc = cross_cor (init, hires, expand, g1, g2, &absccor,
-			       isize, jsize, &shiftx, &shifty, filter, kr);
+			       isize, jsize, &shiftx, &shifty, filter, 
+                               kr, sigma);
 
 /*                              debug:  output of absccor */
 
@@ -465,8 +490,88 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
 */
 
 
-	      /* Now free up all the temporary arrays created
-	       * during the loop */
+              absccmax=1;
+              maxind = maxloc (absccor, isize * jsize);
+              if( *(absccor+maxind) == (double)0.)
+              {
+                 absccmax=0;
+              }
+              if(absccmax == 1)
+              {
+                 ixmax = maxind / jsize;
+                 iymax = maxind % jsize;
+              }
+              else
+              {
+                 ixmax = isize/2;
+                 iymax = jsize/2;
+              }
+              /* printf("flct: ixmax = %d, iymax = %d\n",ixmax,iymax); */
+              gamx2val=0.;
+              gamy2val=0.;
+              gamxyval=0.;
+              gampeakval=0.;
+              gamxval=0.;
+              gamyval=0.;
+              if( (ixmax > 0) && (ixmax < (isize-1)) && (iymax > 0) && 
+                  (iymax < (jsize-1)) && (absccmax == 1))
+              {
+
+                fx=0.5* ( *(absccor+(ixmax+1)*jsize+iymax) - 
+                     *(absccor+(ixmax-1)*jsize+iymax) );
+                fy=0.5* ( *(absccor+ixmax*jsize+iymax+1) - 
+                   *(absccor+ixmax*jsize+iymax-1) );
+                fxx = ( *(absccor+(ixmax+1)*jsize+iymax)+ 
+                   *(absccor+(ixmax-1)*jsize+iymax) 
+                  -2.*( *(absccor+ixmax*jsize+iymax))  );
+                fyy = ( *(absccor+ixmax*jsize+iymax+1) + 
+                   *(absccor+ixmax*jsize+iymax-1)
+                  -2.*( *(absccor+ixmax*jsize+iymax)) );
+                fxy = 0.25*( *(absccor+(ixmax+1)*jsize+iymax+1) + 
+                   *(absccor+(ixmax-1)*jsize+iymax-1) -
+                   *(absccor+(ixmax+1)*jsize+iymax-1) - 
+                   *(absccor+(ixmax-1)*jsize+iymax+1) );
+                fpeak=*(absccor+ixmax*jsize+iymax);
+/*
+                gamx2inv=-0.5*fxx/fpeak;
+                gamy2inv=-0.5*fyy/fpeak;
+                gamxyinv=fxy/fpeak;
+*/
+                gamx2val=fxx;
+                gamy2val=fyy;
+                gamxyval=fxy;
+                gampeakval=fpeak;
+                gamxval=fx;
+                gamyval=fy;
+                hessian=fxx*fyy/(fpeak*fpeak)-fxy*fxy/(fpeak*fpeak);
+                hm1over2=1./sqrt(hessian);
+                /* Don't let ratio of hm1over2 to sigma^2 approach 1 
+                 or get singularity in corfac */
+                if((hm1over2 > 0.95*sigma*sigma) || (hessian == 0))
+                {
+                  hm1over2=0.95*sigma*sigma;
+                }
+                if(!sigmaeq0 && (hessian > 0))
+                {
+                  /* develop statistics for mean value of gamma^2/sigma^2 */
+                  gam2oversigma2+=(hm1over2/(sigma*sigma));
+                  nsig++;
+                }
+                if( (sigmaeq0) || (!biascor)) 
+                {
+                  corfac=1.;
+                }
+                else 
+                {
+                  corfac=1./(1.-0.8*hm1over2/(sigma*sigma));
+                }
+                /* Now add corrections to shiftx, shifty 
+                based on bias correction factor */
+                shiftx*=corfac;
+                shifty*=corfac;
+              }
+
+/* free temporary arrays created during loop */
 
 	      free (g1);
 	      free (g2);
@@ -483,11 +588,23 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
 		{
 		  vxx = shifty * deltinv * deltas;
 		  vyy = shiftx * deltinv * deltas;
+                  *(gamx2+i*ny+j)=gamy2val;
+                  *(gamy2+i*ny+j)=gamx2val;
+                  *(gamxy+i*ny+j)=gamxyval;
+                  *(gampeak+i*ny+j)=gampeakval;
+                  *(gamx+i*ny+j)=gamyval;
+                  *(gamy+i*ny+j)=gamxval;
 		}
 	      else
 		{
 		  vxx = shiftx * deltinv * deltas;
 		  vyy = shifty * deltinv * deltas;
+                  *(gamx2+i*ny+j)=gamx2val;
+                  *(gamy2+i*ny+j)=gamy2val;
+                  *(gamxy+i*ny+j)=gamxyval;
+                  *(gampeak+i*ny+j)=gampeakval;
+                  *(gamx+i*ny+j)=gamxval;
+                  *(gamy+i*ny+j)=gamyval;
 		}
 
 	      /* all the hard work for this pixel is now done */
@@ -508,6 +625,12 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
 	      vxx = xmiss;
 	      vyy = xmiss;
 	      vmask = 0.;
+              *(gamx2 + i*ny +j)=0.;
+              *(gamy2 + i*ny +j)=0.;
+              *(gamxy + i*ny +j)=0.;
+              *(gampeak +i*ny +j)=0.;
+              *(gamx + i*ny +j)=0.;
+              *(gamy + i*ny +j)=0.;
 	    }
 
 
@@ -529,6 +652,16 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
 
 	}
     }
+   if(!sigmaeq0)
+   {
+/*   printf("flct debug: gam2oversigma2 = %g, nsig=%d\n",gam2oversigma2,nsig);*/
+     gam2oversigma2/=nsig;
+     if(verbose)
+     {
+       printf ("flct: mean value of gamma^2/sigma^2 = %g\n",gam2oversigma2);
+       fflush(stdout);
+     }
+   }
 /* Debug
     printf("\n"); 
 */
@@ -723,6 +856,16 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
    * velocity arrays */
 
   free (gaussdata);
+#ifdef CCDATA
+  write3images (gamfile, gamx2, gamy2, gamxy, nx, ny, transp);
+  write3images (peakfile, gampeak, gamx, gamy, nx,ny,transp);
+#endif
+  free (gamx2);
+  free (gamy2);
+  free (gamxy);
+  free (gampeak);
+  free (gamx);
+  free (gamy);
 
 /* Don't want to free these things anymore, they get returned */
 /*
@@ -734,7 +877,10 @@ i4 flct (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
 */
 
   if (verbose)
+  {
     printf ("\nflct: finished\n");
+    fflush(stdout);
+  }
 
   /* we're done! */
   return 0;
@@ -1003,13 +1149,14 @@ i4 where (char *cond, i4 xsize, i4 ** index, i4 * length_index)
 
 i4 cross_cor (i4 init, i4 hires, i4 expand, double *arr, double *barr,
 	   double **absccor, i4 nx, i4 ny, double *shiftx, double *shifty, 
-           i4 filterflag, double kr)
+           i4 filterflag, double kr, double sigma)
 {
   i4 i, j, ixx, iyy, maxind, ixmax, iymax, ishft, maxfine, absccmax;
   i4 nxinterp, nyinterp, nfgppergp;
   double normfac, rangex, rangey, shiftx0, shifty0, shiftxx, shiftyy;
   double *xwant, *ywant, *peakarea;
-  double shiftsubx, shiftsuby, fx, fy, fxx, fyy, fxy;
+  double shiftsubx, shiftsuby, fx, fy, fxx, fyy, fxy, fpeak;
+  double gamx2inv,gamy2inv,sigminv,corx,cory;
   double xmiss=0.;
 
   /* following variables must be saved between calls; declared static */
@@ -1026,6 +1173,16 @@ i4 cross_cor (i4 init, i4 hires, i4 expand, double *arr, double *barr,
   */
 
   *absccor = malloc (sizeof (double) * nx * ny);
+  /* get sigminv = 1./sigma , if sigma==0 set to 0 */
+
+  /*  Following stuff is obsolete; should probably be deleted. */
+  sigminv=0.;
+  if(sigma !=0) sigminv=1./sigma;
+  corx=1.0;
+  cory=1.0;
+  gamx2inv=1.0;
+  gamy2inv=1.0;
+  /* end of obsolete stuff */
 
   /* Set up interpolation grid depending on whether hires set or not */
 
@@ -1226,6 +1383,7 @@ i4 cross_cor (i4 init, i4 hires, i4 expand, double *arr, double *barr,
             *(*absccor+(ixmax-1)*ny+iymax-1) -
             *(*absccor+(ixmax+1)*ny+iymax-1) - 
             *(*absccor+(ixmax-1)*ny+iymax+1) );
+     fpeak=*(*absccor+ixmax*ny+iymax);
 /* In following expressions for subshifts, shift is in units of pixel length */
      shiftsubx=(fyy*fx-fy*fxy)/(fxy*fxy-fxx*fyy);
      shiftsuby=(fxx*fy-fx*fxy)/(fxy*fxy-fxx*fyy);
@@ -2531,7 +2689,7 @@ i4 flct_pc (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
     double deltas, double sigma, double * vx, double * vy, double * vm,
     double thresh, i4 absflag, i4 filter, double kr, i4 skip,
     i4 poffset, i4 qoffset, i4 interpolate, double latmin, double latmax, 
-    i4 verbose) 
+    i4 biascor, i4 verbose) 
 {
 
 /* BEGIN FLCT_PC FUNCTION */
@@ -2543,8 +2701,9 @@ i4 flct_pc (i4 transp, double * f1, double * f2, i4 nx, i4 ny, double deltat,
 /*  char *version ="1.04    "; */
 
 i4 nxinterp,nyinterp,nxf,nyf,nu,nv,i,j,ier,absflag0,iloc1,iloc2,belowthresh;
+i4 sigmaeq0;
 double thresh0, f1max, f2max, fmax, lonmin, lonmax, dellat, dellon, vmin, vmax,
-       fabsbar;
+       fabsbar, latbar;
 double *f1merc=NULL,*f2merc=NULL,*vxmerc=NULL,*vymerc=NULL,*vmmerc=NULL;
 double *vxint=NULL,*vyint=NULL;
 double *f1temp=NULL,*f2temp=NULL;
@@ -2560,7 +2719,10 @@ roles of nx,ny (if transp) to mirror what is assumed in flct.  Still
 retain original nx,ny in case they're needed.
 So:  Will define variables nxf,nyf that are flipped from nx,ny if(transp). 
 Note flct is called with nxinterp,nyinterp.
+
+If sigma == 0, will set nx,ny to 1.
 */
+
 
 if(transp)
 {
@@ -2571,6 +2733,23 @@ else
 {
    nxf=nx;
    nyf=ny;
+}
+
+sigmaeq0=0;
+if(sigma == (double)0) sigmaeq0=1;
+
+if(sigmaeq0)
+{
+   nx=1;
+   ny=1;
+}
+
+/* Note that in flct_pc, we can't use skip without interpolate: */
+
+if((skip != 0) && (interpolate == 0))
+{
+  printf("flct_pc:  If using skip, must also use interpolate. Exiting\n");
+  exit(0);
 }
 
 /* Now associate latitude and longitude directions with nxf,nyf, depending
@@ -2598,10 +2777,17 @@ lonmax=(nu-1)*dellon;
 /* compute 1D array of latitudes: */
 
 latrange=malloc(nv*sizeof(double));
+latbar=0.;
 for(i=0;i<nv;i++)
 {
   latrange[i]=latmin+i*dellat; 
+  latbar+=latrange[i];
 }
+
+/* Compute average latitude latbar */
+
+latbar/=(double)nv;
+
 /* Interpolate f1, f2 images to Mercator coordinates, get nxinterp, nyinterp
    vmin, vmax: */
 
@@ -2616,9 +2802,18 @@ printf("nxf=%d, nyf=%d, nxinterp=%d,nyinterp=%d\n",nxf,nyf,nxinterp,nyinterp);
 
 /* Allocate memory for vxmerc, vymerc, vmmerc before FLCT call */
 
-vxmerc=malloc(nxinterp*nyinterp*sizeof(double));
-vymerc=malloc(nxinterp*nyinterp*sizeof(double));
-vmmerc=malloc(nxinterp*nyinterp*sizeof(double));
+if(!sigmaeq0)
+{
+  vxmerc=malloc(nxinterp*nyinterp*sizeof(double));
+  vymerc=malloc(nxinterp*nyinterp*sizeof(double));
+  vmmerc=malloc(nxinterp*nyinterp*sizeof(double));
+}
+else
+{
+  vxmerc=malloc(1*sizeof(double));
+  vymerc=malloc(1*sizeof(double));
+  vmmerc=malloc(1*sizeof(double));
+}
 
 /* Because we don't want to interpolate computed points with points below
 threshold, make sure we compute all points with flct and then set points to
@@ -2634,54 +2829,83 @@ absflag0=0;
 
 if(transp)
 {
+    if(verbose) 
+    {
+      printf("flct_pc: No. of points in v - Mercator Proj: %d\n", nxinterp);
+      fflush(stdout);
+    }
+    if(verbose) 
+    {
+      printf("flct_pc: effective value of sigma in Merc Proj: %g\n",
+      sigma * (double) nxf / (double) nxinterp );  
+      fflush(stdout);
+    }
     ier=flct(transp,f1merc,f2merc,nyinterp,nxinterp,deltat,deltas,sigma,
     vxmerc,vymerc,vmmerc,thresh0,absflag0,filter,kr,skip,poffset,qoffset,
-    interpolate,verbose);
+    interpolate,biascor,verbose);
 }
 else
 {
+    if(verbose) 
+    {
+      printf("flct_pc: No. of points in v - Mercator Proj: %d\n",
+      nyinterp);
+      fflush(stdout);
+    }
+    if(verbose) 
+    {
+      printf("flct_pc: effective value of sigma in Merc Proj: %g\n",
+      sigma * (double) nyf / (double) nyinterp );  
+      fflush(stdout);
+    }
     ier=flct(transp,f1merc,f2merc,nxinterp,nyinterp,deltat,deltas,sigma,
     vxmerc,vymerc,vmmerc,thresh0,absflag0,filter,kr,skip,poffset,qoffset,
-    interpolate,verbose);
+    interpolate,biascor,verbose);
 }
 
 /* Now interpolate vxmerc, vymerc back to Plate Carree grid (vxint,vyint): */
-
-ier=mc2pc(transp,vxmerc,nxinterp,nyinterp,lonmin,lonmax,vmin,vmax,&vxint,
+if(!sigmaeq0)
+{
+  ier=mc2pc(transp,vxmerc,nxinterp,nyinterp,lonmin,lonmax,vmin,vmax,&vxint,
     nxf,nyf);
-ier=mc2pc(transp,vymerc,nxinterp,nyinterp,lonmin,lonmax,vmin,vmax,&vyint,
+  ier=mc2pc(transp,vymerc,nxinterp,nyinterp,lonmin,lonmax,vmin,vmax,&vyint,
     nxf,nyf);
+}
 
 /* Next, modulate velocities by cos(latitude): */
 
-if(transp) /*  Column major case (latitudes vary slowest) */
-{
-   for(i=0;i<nxf;i++)
-      {
-      for(j=0;j<nyf;j++)
-         {
-           vx[i*nyf+j]=cos(latrange[i])*vxint[i*nyf+j];
-           vy[i*nyf+j]=cos(latrange[i])*vyint[i*nyf+j];
-           vm[i*nyf+j]=0.5; /* all values interpolated, so vm=0.5 */
-         }
-      }
-}
-else /* Row major case (latitudes vary fastest) */
-{
-   for(i=0;i<nxf;i++)
-      {
-      for (j=0;j<nyf;j++)
-          {
-            vx[i*nyf+j]=cos(latrange[j])*vxint[i*nyf+j];
-            vy[i*nyf+j]=cos(latrange[j])*vyint[i*nyf+j];
-            vm[i*nyf+j]=0.5; /* all values interpolated, so vm=0.5 */
-          }
-      }
+if(!sigmaeq0)
+  {
+
+  if(transp) /*  Column major case (latitudes vary slowest) */
+  {
+     for(i=0;i<nxf;i++)
+        {
+        for(j=0;j<nyf;j++)
+           {
+             vx[i*nyf+j]=cos(latrange[i])*vxint[i*nyf+j];
+             vy[i*nyf+j]=cos(latrange[i])*vyint[i*nyf+j];
+             vm[i*nyf+j]=0.5; /* all values interpolated, so vm=0.5 */
+           }
+        }
+  }
+  else /* Row major case (latitudes vary fastest) */
+  {
+     for(i=0;i<nxf;i++)
+        {
+        for (j=0;j<nyf;j++)
+            {
+              vx[i*nyf+j]=cos(latrange[j])*vxint[i*nyf+j];
+              vy[i*nyf+j]=cos(latrange[j])*vyint[i*nyf+j];
+              vm[i*nyf+j]=0.5; /* all values interpolated, so vm=0.5 */
+            }
+        }
+  }
 }
 
 /* Now put in logic to set points below threshold to 0: (this code copied from
    flct function itself, since we have to repeat its logic) */
-if ((thresh > 0.) && (thresh < 1.) && (absflag == 0))
+if ((thresh > 0.) && (thresh < 1.) && (absflag == 0) && (!sigmaeq0))
 
 {
   f1temp = (double *) malloc (sizeof (double) * nxf * nyf);
@@ -2720,20 +2944,36 @@ if ((thresh > 0.) && (thresh < 1.) && (absflag == 0))
 
 /* Now set vx,vy,vm to 0 if image points are below threshold: */
 
+if(!sigmaeq0)
+{
 for (i = 0; i < nxf; i++)
+    {
+      for (j = 0; j < nyf; j++)
+        {
+            fabsbar = 0.5 * (fabs (*(f1 + i * nyf + j) + *(f2 + i * nyf + j)));
+            belowthresh = (fabsbar < thresh);
+            if (belowthresh)
+            {
+               *(vx+i*nyf+j)=0.;
+               *(vy+i*nyf+j)=0.;
+               *(vm+i*nyf+j)=0.;
+            }
+        }
+    }
+}
+if(sigmaeq0) /* Only a single value is computed if sigma == 0 */
+{
+  vx[0] = cos(latbar) * vxmerc[0];
+  vy[0] = cos(latbar) * vymerc[0];
+  vm[0] = 0.5; /* in this case we should say vx,vy interpolated */
+  if(verbose) 
   {
-    for (j = 0; j < nyf; j++)
-      {
-          fabsbar = 0.5 * (fabs (*(f1 + i * nyf + j) + *(f2 + i * nyf + j)));
-          belowthresh = (fabsbar < thresh);
-          if (belowthresh)
-          {
-             *(vx+i*nyf+j)=0.;
-             *(vy+i*nyf+j)=0.;
-             *(vm+i*nyf+j)=0.;
-          }
-      }
+     printf("flct_pc: After cos(latbar) modulation, vx = %g, vy =%g\n" 
+       ,vx[0],vy[0]);
+     fflush(stdout);
   }
+}
+
 /* debugging code block:  write out f1merc,f2merc,vxmerc,vymerc,vxint,vyint */
 {
   i4 debug=0;
@@ -2764,7 +3004,7 @@ void flct_pc_f77__(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx, 
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter, 
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     double * latmin, double * latmax, i4 * verbose)
+     double * latmin, double * latmax, i4 * biascor, i4 * verbose)
 
 {
 i4 ierflct;
@@ -2774,7 +3014,7 @@ i4 ierflct;
 
 ierflct=flct_pc(*transp,f1,f2,*nx,*ny,*deltat,*deltas,*sigma,vx,vy,vm,
      *thresh,*absflag,*filter,*kr,*skip,*poffset,*qoffset,*interpolate,
-     *latmin, *latmax, *verbose);
+     *latmin, *latmax, *biascor, *verbose);
 
 return;
 }
@@ -2783,7 +3023,7 @@ void flct_pc_f77_(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx, 
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter, 
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     double * latmin, double * latmax, i4 * verbose)
+     double * latmin, double * latmax, i4 * biascor, i4 * verbose)
 
 {
 i4 ierflct;
@@ -2793,7 +3033,7 @@ i4 ierflct;
 
 ierflct=flct_pc(*transp,f1,f2,*nx,*ny,*deltat,*deltas,*sigma,vx,vy,vm,
      *thresh,*absflag,*filter,*kr,*skip,*poffset,*qoffset,*interpolate,
-     *latmin, *latmax, *verbose);
+     *latmin, *latmax, *biascor, *verbose);
 
 return;
 }
@@ -2802,7 +3042,7 @@ void flct_pc_f77(i4 * transp, double * f1, double * f2, i4 * nx, i4 * ny,
      double * deltat, double * deltas, double * sigma, double * vx, 
      double * vy, double * vm, double * thresh, i4 * absflag, i4 * filter, 
      double * kr, i4 * skip, i4 * poffset, i4 * qoffset, i4 * interpolate,
-     double * latmin, double * latmax, i4 * verbose)
+     double * latmin, double * latmax, i4 * biascor, i4 * verbose)
 
 {
 i4 ierflct;
@@ -2812,7 +3052,7 @@ i4 ierflct;
 
 ierflct=flct_pc(*transp,f1,f2,*nx,*ny,*deltat,*deltas,*sigma,vx,vy,vm,
      *thresh,*absflag,*filter,*kr,*skip,*poffset,*qoffset,*interpolate,
-     *latmin, *latmax, *verbose);
+     *latmin, *latmax, *biascor, *verbose);
 
 return;
 }

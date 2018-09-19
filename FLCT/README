@@ -1,4 +1,4 @@
-November 28, 2017 - George H. Fisher and Brian T. Welsch, SSL, UC Berkeley
+February 6, 2018 - George H. Fisher and Brian T. Welsch, SSL, UC Berkeley
 
 The FLCT code is being developed using a Fossil repository.  The latest
 contents can be viewed here:
@@ -38,17 +38,51 @@ other programs, the GPL v. 2 licensing agreement provisions will apply.
 
 VERSION
 
-This current version of flct is 1.04, derived Nov. 28, 2017 from checkin 
-[30dc874b2a] from fossil development page 
-http://cgem.ssl.berkeley.edu/cgi-bin/cgem/FLCT/home.  
-The main difference between this version of flct and 1.03 is the addition of 
-an experimental "Plate Carree" option, both in the flct library functions, 
-and in the standalone executable, allowing one to input images stored in 
-Plate Carree format, where the images are distributed in an equally spaced 
-longitude and latitude grid.  If this option is invoked, the images are 
-remapped to a Mercator projection, flct is run, and then the velocity 
-components are mapped back to Plate Carree coordinates.  Cubic convolution is 
-used for the interpolation operations.
+This current version of flct is 1.06. It differs from version 1.05 by the
+addition of an optional, experimental "bias correction" algorithm, to 
+correct the artifically low amplitudes of the x-and-y components of the 
+velocity returned by FLCT.  The bias correction algorithm can be invoked 
+by inserting the option "-bc" into the command-line version of flct at 
+run-time.  The default assumption is that no bias-correction is done.
+A detailed description of how the bias correction is done is given in the 
+file bias_correction_in_flct.txt which is located in the doc folder of the 
+distribution.  Version 1.06 also optionally writes out two additional files,
+containing information about the cross-correlation function for each pixel
+location where a velocity is computed.  
+
+To choose to write out the two files, uncomment the line in flctsubs.h
+that defines the C pre-processor flag CCDATA, before compiling the code.  
+The function flct will then write out the two files, deriv2.dat and deriv1.dat.
+The file deriv2.dat contains 3 two- dimensional arrays, consisting of the 2nd 
+derivative of the cross-correlation function near its peak with respect to x, 
+the 2nd derivative with respect to y, and the cross-partial derivative.  
+The file deriv1.dat contains the peak value of the cross-correlation function, 
+and the 1st derivatives with respect to x and y near the peak.  These six 
+quantities define the properties of the cross-correlation function near its 
+peak.  The contents of these files can be read in IDL or GDL using the 
+procedure vcimage3in.pro included in
+the IDL folder.  For example, to read in the 6 arrays in an IDL or GDL
+session, you can type
+vcimage3in,fxx,fyy,fxy,'deriv2.dat'
+vcimage3in,fpeak,fx,fy,'deriv1.dat'.
+
+Version 1.05 had fixes for several bugs in
+version 1.04, but didn't change the overall functionality much from 1.04.
+The bugs fixed were a memory allocation problem when using both the Plate
+Carree option and when setting sigma=0.  A second bug occurred when trying
+to use the "skip" option while also using the Plate Carree option.  The code 
+will now exit if interpolation is not invoked along with the skip option, when
+combined with the Plate Carree option.
+
+The main difference between version 1.04 of flct
+and version 1.03 is the addition of an experimental
+"Plate Carree" option, both in the flct library functions, and in the 
+standalone executable, allowing one to input images stored in Plate Carree 
+format, where the images are distributed in an equally spaced longitude and 
+latitude grid.  If this option is invoked, the images are remapped to 
+a Mercator projection, flct is run, and then the velocity components are 
+mapped back to Plate Carree coordinates.  Cubic convolution is used for 
+the interpolation operations.
 
 The motivation for adding the "Plate Carree" option is to support the CGEM
 project, in which HMI vector magnetogram data for SHARP regions are interpolated

@@ -1,7 +1,7 @@
 /*
 
  FLCT: http://solarmuri.ssl.berkeley.edu/overview/publicdownloads/software.html
- Copyright (C) 2007-2017 Regents of the University of California
+ Copyright (C) 2007-2018 Regents of the University of California
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,23 @@
 */
 
 /* 
+ * January 25, 2018 - source code has been modified in two ways:  A new
+ * "bias correction" algorithm has been added, which can be invoked from the
+ * command-line by specifying "-bc" in addition to the other options.  For
+ * the flct library functions, the flct and flct_pc functions have an additional
+ * argument, biascor, an integer flag which if non-zero, will attempt to do
+ * the bias correction.  Also in the source code, a C-preprocessor flag, 
+ * CCDATA, can be defined.  If defined, the flct function writes out two
+ * additional files, deriv2.dat and deriv1.dat which contain information about
+ * the cross-correlation function for each pixel location where the velocity
+ * is computed.  The default is to not define CCDATA.
+ *
+ * December 8, 2017 - source code has been modified to fix a couple of bugs
+ * in flct_pc.  An error occurred if sigma=0 in flct_pc, that bug has now
+ * hopefully been fixed.  Similarly, a bug occurs if the skip option is used
+ * in flct_pc without interpolation.  Now flct_pc will exit if the skip
+ * option is used without the interpolation sub-option.
+
  * November 28, 2017 GHF - source code has been modified to allow for the
  * definition of complex variables in C.  To turn on support for complex 
  * variables, uncomment the line */
@@ -287,7 +304,7 @@ int main (int argc, char *argv[])
 
 /* BEGIN MAIN PROGRAM */
 
-  char *version ="1.04    ";
+  char *version ="1.06    ";
   char infile[100], outfile[100], deltats[100], deltass[100], sigmas[100],
     threshs[100], ks[100],skips[100],latmins[100],latmaxs[100];
   char *aloc = NULL;
@@ -301,8 +318,10 @@ int main (int argc, char *argv[])
   i4 poffset=0, qoffset=0, skip=0, skipon=0, degree=0;
   i4 interpolate=0;
   i4 platecarree=0;
+  i4 biascor=0;
   double *f1 = NULL, *f2 = NULL, *vx = NULL, *vy = NULL, *vm = NULL;
   double deltat, deltas, sigma, thresh, latmin, latmax, kr=0. ;
+  /* char krtest; */
   double pi=3.1415926535897932;
 /*      double tol=1e-4; */
   i4 transp = 1; /* This flag is nonzero to transpose input/output arrays */
@@ -312,13 +331,13 @@ int main (int argc, char *argv[])
   /* check to see if number args is in right range - 
    * if not, print syntax & quit */
 
-  if ((argc < 6) || (argc > 17))
+  if ((argc < 6) || (argc > 18))
     {
-      printf("flct: Version %s Copyright: 2007-2017 University of California\n",
+      printf("flct: Version %s Copyright: 2007-2018 University of California\n",
           version);
       printf("Authors: G.H. Fisher, B.T. Welsch, UCB Space Sciences Lab\n\n");
       printf
-        ("Syntax: %s ifile ofile deltat deltas sigma -t thr -k kr -s N[pP][qQ][i] -h -q\n\n"
+        ("Syntax: %s ifile ofile deltat deltas sigma -t thr -k kr -s N[pP][qQ][i] -pc latmin latmax -bc -h -q\n\n"
             ,argv[0]);
       printf("ifile - contains 2 images for local correlation tracking\n");
       printf("   (to create ifile use the IDL procedure vcimage2out.pro)\n");
@@ -344,6 +363,7 @@ int main (int argc, char *argv[])
       printf("    - kr is in units of max of kx, ky (typically 0 < kr < 1) \n");
       printf("-pc latmin latmax - assume images are in Plate Carree format\n");
       printf("    with latitude limits latmin, latmax (radians)\n");
+      printf("-bc - 'bias correction' is turned on if this is included\n");
       printf("-h  - 'hires' flag - DISABLED\n");
       printf("-q  - flag to suppress printing all non-error messages\n");
       exit (1);
@@ -399,6 +419,7 @@ int main (int argc, char *argv[])
   thresh = (double) 0.;
   absflag=0;
   platecarree=0;
+  biascor=0;
 
   if(argc >= 7)
   {
@@ -411,6 +432,10 @@ int main (int argc, char *argv[])
        if(!strncmp("-q",argv[iarg],2))
        {
           quiet=1;
+       }
+       if(!strncmp("-bc",argv[iarg],3))
+       {
+          biascor=1;
        }
        if(!strncmp("-t",argv[iarg],2) && ((iarg+1) < argc))
        {
@@ -509,7 +534,20 @@ int main (int argc, char *argv[])
           /* read in filter roll-off value, relative to max. kx, ky */
 
           strncpy (ks, argv[iarg+1], 99);
+          /*  following test commented out, replaced by test below
+          krtest=(int) isnumber(ks[0]);
+          if(!krtest)
+          {
+            printf("flctmain: Illegal value of kr.  Must be a number\n");
+            exit(0);
+          }
+          */
           kr = (double) atof (ks);
+          if((kr <=0.) || (kr > 20.))
+          {
+            printf("flctmain: Nonsense value of kr, = %g, exiting\n",kr);
+            exit(0);
+          }
           filter=1;
        }
        
@@ -558,7 +596,7 @@ int main (int argc, char *argv[])
   ibe = is_large_endian ();
   if (verbose)
     {
-      printf("flct: Version %s Copyright: 2007-2017 University of California\n",
+      printf("flct: Version %s Copyright: 2007-2018 University of California\n",
           version);
       if (ibe)
 	{
@@ -568,12 +606,17 @@ int main (int argc, char *argv[])
 	{
 	  printf ("flct: small endian machine; i/o will be byteswapped\n");
 	}
+      fflush(stdout);
     }
 
   /* print out arguments and options */
 
   if (verbose) printf ("flct: infile = %s\n", infile);
   if (verbose) printf ("flct: outfile = %s\n", outfile);
+  if (verbose && transp !=0)
+     printf("flct: column major order assumed for data arrays\n");
+  if (verbose && transp == 0)
+     printf("flct: row major order assumed for data arrays\n");
   if (verbose) printf ("flct: deltat = %g\n", deltat);
   if (verbose) printf ("flct: deltas = %g\n", deltas);
   if (verbose) printf ("flct: sigma = %g\n", sigma);
@@ -594,14 +637,20 @@ int main (int argc, char *argv[])
        printf ("flct: skipped pixels interpolated with cubic convolution\n");
   if (verbose && filter)
        printf ("flct: filter rolloff value for input images is %g\n", kr);
+  if (verbose && biascor)
+       printf("flct: bias correction is enabled\n");
+  if (verbose && !biascor)
+       printf("flct: bias correction not enabled\n");
   if (verbose && platecarree)
        printf ("flct: Plate Carree image format, latmin=%g latmax=%g\n",
        latmin,latmax);
+
 #ifdef COMPLEXH
   if (verbose) printf ("flct: complex.h is included\n");
 #else
   if (verbose) printf ("flct: complex.h is not included\n");
 #endif
+
   if (hires == 0) 
      {
        /*  Make this print statement more informative */
@@ -661,13 +710,13 @@ int main (int argc, char *argv[])
   {
     ierflct=flct_pc(transp, f1, f2, nxorig, nyorig, deltat, deltas, sigma, 
           vx, vy, vm, thresh, absflag, filter, kr, skip, poffset, qoffset, 
-          interpolate, latmin, latmax, verbose); 
+          interpolate, latmin, latmax, biascor, verbose); 
   }
   else
   {
      ierflct=flct(transp, f1, f2, nxorig, nyorig, deltat, deltas, sigma, 
           vx, vy, vm, thresh, absflag, filter, kr, skip, poffset, qoffset, 
-          interpolate, verbose); 
+          interpolate, biascor, verbose); 
   }
 
   /* Now do output I/O if no errors.  Note no transpose of nx, ny on output*/
