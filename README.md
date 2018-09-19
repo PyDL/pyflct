@@ -2,14 +2,15 @@
 07 December 2017 - Jiajia Liu, SP2RC, University of Sheffield
 
 ## Update 19 September 2018
-Fisher & Welsch updated FLCT to 1.0.6, while the original FLCT I used was 1.0.4.
-A new function of "bias correction" has been implemented in the new version.
+Fisher & Welsch updated FLCT to 1.0.6, while the original FLCT version I used was 1.0.4.
+A new function of "bias correction" has been implemented in the new version by Fisher & Welsch.
 
 A preliminary test of mine shows that:
-* Velocity field resulted from 1.0.6 has no difference with that from 1.0.4
-* If the "bias correction" is turned on, exactly the same swirls will be 
+* Velocity field resulted from 1.0.6 has **no difference** with that from 1.0.4
+* If the "bias correction" is turned on, **exactly the same swirls** will be 
 detected by ASDA. But the rotating and expanding/shrinking speed of the detected 
-swirls would in average increase by around 30%.
+swirls would in average **increase by around 30%**.
+* More test will be made in the future.
 
 ## Discription: 
  Python wrapper for FLCT code written in C from Fisher & Welsch
