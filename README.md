@@ -1,5 +1,15 @@
 # pyflct
 07 December 2017 - Jiajia Liu, SP2RC, University of Sheffield
+## Update 19 September 2018
+Fisher & Welsch updated FLCT to 1.0.6, while the original FLCT I used was 1.0.4.
+A new function of "bias correction" has been implemented in the new version.
+
+A preliminary test of mine shows that:
+* Velocity field resulted from 1.0.6 has no difference with that from 1.0.4
+* If the "bias correction" is turned on, exactly the same swirls will be 
+detected by ASDA. But the rotating and expanding/shrinking speed of the detected 
+swirls would in average increase by around 30%.
+
 ## Discription: 
  Python wrapper for FLCT code written in C from Fisher & Welsch
  2008. You can download the original C code from the following link:
@@ -48,6 +58,7 @@
          pc - If set, then the input images are assumed to be in Plate Carree
               coordinates (uniformly spaced in longitude and latitude). This
               is useful when e.g. input images are SHARP magnetic field data.
+         bc - If set, bias correction will be turned on (new feature in 1.0.6)
          latmin, latmax - minimum and maximum latitude. Only valid if pc is
                           set. In units of radian.
          quiet - If set, no non-error output will be shown.
