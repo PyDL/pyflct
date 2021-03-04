@@ -71,8 +71,8 @@ __author__ = 'Jiajia Liu'
 __copyright__ = 'Copyright 2017, The Solar Physics and Space Plasma ' + \
                 'Research Center (SP2RC)'
 __license__ = 'GPLv2'
-__version__ = '1.04'  # consistent with the version of the C code
-__date__ = '2017/12/05'
+__version__ = '1.06'  # consistent with the version of the C code
+__date__ = '2019/11/27'
 __maintainor__ = 'Jiajia Liu'
 __email__ = 'jj.liu@sheffield.ac.uk'
 
